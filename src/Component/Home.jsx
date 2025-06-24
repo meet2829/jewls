@@ -16,30 +16,6 @@ import ContactForm from './ContactForm';
 
 
 const Home = () => {
-//   // only for collect contact information and connect to database
-//     const [formData, setFormData] = useState({
-//         firstName: '',
-//         lastName: '',
-//         email: '',
-//         message: ''
-//     });
-
-//     const handleChange = e => {
-//         setFormData({ ...formData, [e.target.name]: e.target.value });
-//     };
-
-//     const handleSubmit = async e => {
-//         e.preventDefault();
-
-//         try {
-//             const res = await axios.post("http://localhost:8080/contact", formData);
-//             alert("Message sent successfully!");
-//         } catch (error) {
-//             console.error("Error sending message", error);
-//             alert("Failed to send message");
-//         }
-//     };
-
 
 
     return (
@@ -50,7 +26,6 @@ const Home = () => {
                     <div className="text-3xl font-bold">GIADA</div>
                     <nav className="hidden md:flex space-x-6 text-sm">
                         <Link to="/" className="hover:underline">Home</Link>
-                        <Link to="/portfolio" className="hover:underline">Portfolio</Link>
                         <Link to="/blog" className="hover:underline">Blog</Link>
                         <Link to="/shop" className="hover:underline">Shop</Link>
                         <Link to="/contactus" className="hover:underline">Contact Us</Link>

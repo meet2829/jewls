@@ -8,7 +8,6 @@ import Blog from './Component/Blog';
 import Aboutus from './Component/Aboutus';
 import Contactus from './Component/Contactus';
 import Shop from './Component/Shop';
-import Portfolio from './Component/portfolio';
 import AuthForm from './Component/AuthForm';
 
 const Allroutes = () => {
