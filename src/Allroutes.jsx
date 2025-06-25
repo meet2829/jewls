@@ -22,9 +22,6 @@ const Allroutes = () => {
             <Route path='/shop' element={<Shop />}></Route>
             <Route path='/login' element={<AuthForm />}></Route>
         </Routes>
-       
-        
-
       
     </div>
   )
