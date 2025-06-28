@@ -70,7 +70,7 @@ const CartPage = () => {
                     <h4 className="font-semibold">{item.name}</h4>
                     <p className="text-gray-500 text-sm">{item.category}</p>
                     <div className="text-gray-800 mt-1">
-                      ${item.price.toFixed(2)} × {item.quantity}
+                      {item.price.toFixed(2)} × {item.quantity}
                     </div>
                   </div>
                 </div>
@@ -101,7 +101,7 @@ const CartPage = () => {
 
             <div className="text-right mt-10">
               <p className="text-xl font-bold">
-                Total: ${getTotal().toFixed(2)}
+                Total: {getTotal().toFixed(2)}
               </p>
               <button className="mt-4 px-6 py-3 bg-red-700 text-white rounded hover:bg-red-800">
                 Proceed to Checkout
