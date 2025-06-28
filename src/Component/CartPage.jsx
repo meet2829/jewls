@@ -26,8 +26,7 @@ const CartPage = () => {
     setCart(updatedCart);
     localStorage.setItem('cart', JSON.stringify(updatedCart));
   };
-
-  return (
+  return (  
     <div>
 
       <header className="z-20 relative flex justify-between items-center px-8 py-6">
