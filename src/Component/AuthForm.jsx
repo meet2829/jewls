@@ -4,6 +4,8 @@ import loginbg from '../assets/Login-bg.jpg'
 
 const AuthForm = () => {
   const [isSignUp, setIsSignUp] = useState(false);
+  const [step, setStep] = useState(1); // 1 = Form, 2 = OTP
+  const [otp, setOtp] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -23,24 +25,51 @@ const AuthForm = () => {
     e.preventDefault();
 
     const { name, email, password } = formData;
-    const url = isSignUp
-      ? "http://localhost:8080/register"
-      : "http://localhost:8080/login";
 
-    axios.post(url, { name, email, password })
-      .then(res => {
-        console.log(res.data);
-        alert(`${isSignUp ? 'Registered' : 'Logged in'} successfully`);
-      })
-      .catch(err => {
-        console.error(err);
-        alert("Something went wrong");
-      });
+    if (isSignUp && step === 1) {
+      axios.post('http://localhost:8080/send-otp', { email })
+        .then(res => {
+          alert('OTP sent to your email');
+          setStep(2); // move to OTP input
+        })
+        .catch(err => {
+          console.error(err);
+          alert('Error sending OTP');
+        });
+    } else if (isSignUp && step === 2) {
+      axios.post('http://localhost:8080/verify-otp', { email, otp })
+        .then(res => {
+          // Register after OTP verification
+          return axios.post('http://localhost:8080/register', { name, email, password });
+        })
+        .then(res => {
+          alert('Registered successfully');
+          setIsSignUp(false);
+          setStep(1);
+          setFormData({ name: '', email: '', password: '' });
+        })
+        .catch(err => {
+          console.error(err);
+          alert('OTP verification or registration failed');
+        });
+    } else {
+      // Regular login
+      axios.post('http://localhost:8080/login', { email, password })
+        .then(res => {
+          alert('Logged in successfully');
+        })
+        .catch(err => {
+          console.error(err);
+          alert('Login failed');
+        });
+    }
   };
 
   return (
     <div className="min-h-screen bg-contain bg-center flex items-center justify-center relative " style={{ backgroundImage: `url(${loginbg})` }}>
       {/* Background overlay with blur */}
+
+
       <div className="absolute inset-0 bg-black/10 backdrop-blur-sm"></div>
 
       {/* Glassy Auth Form */}
@@ -87,6 +116,24 @@ const AuthForm = () => {
               required
             />
           </div>
+
+
+          {isSignUp && step === 2 && (
+            <div>
+              <label className="block text-sm mb-1">Enter OTP</label>
+              <input
+                type="text"
+                name="otp"
+                className="w-full px-4 py-2 bg-white/20 text-white border border-white/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-white/50"
+                placeholder="6-digit OTP"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+                required
+              />
+            </div>
+          )}
+
+
           <button
             type="submit"
             className="w-full py-2 px-4 bg-white text-gray-800 font-semibold rounded-lg hover:bg-gray-100 transition"

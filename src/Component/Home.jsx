@@ -7,10 +7,11 @@ import img2 from '../assets/img-2.jpg'
 import img3 from '../assets/img-3.jpg'
 import img4 from '../assets/img-4.jpg'
 import promoVideo from '../assets/main-video.mp4'
-import BestProducts from './BestProducts';
 import { Link } from "react-router-dom";
 import ContactForm from './ContactForm';
 import Footer from './Footer';
+import CartPage from './CartPage';
+import ProductGrid from './ProductGrid'
 
 
 
@@ -21,7 +22,15 @@ const Home = () => {
 
     return (
         <div>
-            <section className="relative overflow-hidden bg-[#F2D3D3] text-[#111]">
+            <section className="relative overflow-hidden   text-[#111]">
+                <div
+                    className="absolute inset-0 z-0"
+                    style={{
+                        backgroundColor: "#F2D3D3",
+                        clipPath: "polygon(50% 0%, 100% 0, 100% 43%, 100% 83%, 67% 93%, 34% 85%, 4% 96%, 0% 43%, 0 0)",
+                        WebkitClipPath: "polygon(50% 0%, 100% 0, 100% 43%, 100% 83%, 67% 93%, 34% 85%, 4% 96%, 0% 43%, 0 0)",
+                    }}
+                ></div>
                 {/* Navbar */}
                 <header className="z-20 relative flex justify-between items-center px-8 py-6">
                     <div className="text-3xl font-bold">Jewls</div>
@@ -35,18 +44,22 @@ const Home = () => {
                     <div className="flex space-x-4 items-center">
                         <Link to="/login" className="hover:underline">Login</Link>
                         <button>🔍</button>
-                        <button>🛒(0)</button>
+                        <Link to="/Cartpage" className="hover:underline">🛒(0)</Link>
                     </div>
                 </header>
-
                 {/* Hero Content */}
                 <div className="relative h-screen w-full">
                     {/* Background */}
                     <div
-                        className="absolute inset-0 z-0 bg-contain bg-right bg-no-repeat"
-                        style={{ backgroundImage: `url(${bgImage})`, pointerEvents: "none" }}
-                    ></div>
+                        className="absolute inset-0 z-0 bg-contain bg-right bg-no-repeat h-202 w-full"
+                        style={{
+                            backgroundImage: `url(${bgImage})`,
+                            clipPath: "polygon(50% 0%, 100% 0, 100% 43%, 100% 83%, 67% 93%, 34% 85%, 4% 96%, 0% 43%, 0 0)",
+                            WebkitClipPath: "polygon(50% 0%, 100% 0, 100% 43%, 100% 83%, 67% 93%, 34% 85%, 4% 96%, 0% 43%, 0 0)",
+                            pointerEvents: "none",
 
+                        }}
+                    ></div>
                     {/* Text Content */}
                     <div className="absolute inset-0 z-10 flex items-center justify-start text-left px-8 md:px-24" data-aos="fade-up">
                         <div className="max-w-4xl">
@@ -74,7 +87,7 @@ const Home = () => {
                         <FaMapMarkerAlt className="text-4xl text-orange-300 mx-auto mb-4" />
                         <h3 className="font-bold text-lg mb-2">Have a Plan</h3>
                         <p className="text-sm text-gray-600">
-                            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditis praesentium voluptatum
+                            Inspire customers to plan ahead for occasions like weddings, birthdays, anniversaries, or seasonal gifts — while showcasing how your jewelry can be a perfect match.
                         </p>
                         <div className="h-[2px] w-6 bg-black mx-auto mt-4"></div>
                     </div>
@@ -83,7 +96,7 @@ const Home = () => {
                         <FaHeart className="text-4xl text-orange-300 mx-auto mb-4" />
                         <h3 className="font-bold text-lg mb-2">Creative Style</h3>
                         <p className="text-sm text-gray-600">
-                            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditis praesentium voluptatum
+                            Here’s a creatively styled version of a “Have a Plan” section for your jewelry website — something elegant, luxurious, and aspirational — matching a premium brand tone.
                         </p>
                         <div className="h-[2px] w-6 bg-black mx-auto mt-4"></div>
                     </div>
@@ -92,7 +105,8 @@ const Home = () => {
                         <FaComments className="text-4xl text-orange-300 mx-auto mb-4" />
                         <h3 className="font-bold text-lg mb-2">Top Blogging</h3>
                         <p className="text-sm text-gray-600">
-                            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditis praesentium voluptatum
+                            Style, sparkle, and stories that inspire.
+                            Explore our handpicked blog posts about jewelry trends, styling tips, craftsmanship secrets, and more. Because every gem has a story — and we love telling it.
                         </p>
                         <div className="h-[2px] w-6 bg-black mx-auto mt-4"></div>
                     </div>
@@ -101,7 +115,8 @@ const Home = () => {
                         <FaDotCircle className="text-4xl text-orange-300 mx-auto mb-4" />
                         <h3 className="font-bold text-lg mb-2">Enjoy Contrast</h3>
                         <p className="text-sm text-gray-600">
-                            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditis praesentium voluptatum
+                            In every gem, a story of balance.
+                            Where bold brilliance meets delicate elegance, and heritage meets modern flair — discover the harmony of opposites in our curated pieces.
                         </p>
                         <div className="h-[2px] w-6 bg-black mx-auto mt-4"></div>
                     </div>
@@ -130,10 +145,11 @@ const Home = () => {
                     </h2>
                     <div className="w-12 h-[2px] bg-black mb-4 mx-auto lg:mx-0"></div>
                     <p className="text-gray-700 mb-4">
-                        Brute instructior cu mea, pro ad facer scaevola accommodare. Augue legendos inimicus sed et, ad est alterum equidem.
+                        Romance meets refinement in this exclusive collection. Handcrafted gold pieces infused with rose motifs and floral artistry — designed to be gifted, worn, and treasured forever.
                     </p>
                     <p className="text-sm text-gray-500 mb-6">
-                        Mei ad idque forensibus, ad est alii oratio voluptua. Eam at simul lobortis, sit graece option urbanitas id. Usu eu mentitum laboramus democritum, pri et graeco phaedrum temporibus. Erat solet et sea, ad mel natum sonet, vel et inani mnesarchum. Usu eu mentium pri et.
+                        Inspired by the softness of roses and the strength of gold, this collection captures love, beauty, and timeless craftsmanship.
+                        From delicate rose-shaped pendants to radiant gold bangles kissed with floral detail — embrace elegance that never fades.
                     </p>
                     <a href="#" className="text-sm italic underline text-red-700 hover:text-red-900">
                         View more
@@ -149,7 +165,7 @@ const Home = () => {
                         Find <span className="italic">the</span> Inspiration
                     </h2>
                     <p className="text-gray-600">
-                        Brute instructior cu mea, pro ad facer scaevola accommodare. Augue legendos inimicus sed et, ad est alterum equidem.
+                        Discover textured metals, earthy gemstones, and cozy elegance crafted into every piece. Let autumn’s poetry reflect in your style.
                     </p>
                     <div className="h-[2px] w-10 bg-black mx-auto mt-4"></div>
                 </div>
@@ -165,7 +181,7 @@ const Home = () => {
                         <p className="text-xs text-gray-500">09.04.2021. - Design - Jewelry</p>
                         <h3 className="font-bold text-lg mt-2 mb-1">Sunglasses are Forever</h3>
                         <p className="text-sm text-gray-600 mb-2">
-                            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis
+                            From sunlit strolls to golden hour glam, our sunglasses aren’t just for today — they’re for every unforgettable look.
                         </p>
                         <a href="#" className="text-red-600 italic text-sm hover:underline">Read More</a>
                     </div>
@@ -180,7 +196,7 @@ const Home = () => {
                         <p className="text-xs text-gray-500">09.04.2021. - Design - Jewelry</p>
                         <h3 className="font-bold text-lg mt-2 mb-1">Red Lipstick is Right Choice</h3>
                         <p className="text-sm text-gray-600 mb-2">
-                            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis
+                            Our curated red-toned jewelry, makeup, and accessories are crafted to amplify your boldness, refine your edge, and let your inner fire shine.
                         </p>
                         <a href="#" className="text-red-600 italic text-sm hover:underline">Read More</a>
                     </div>
@@ -195,7 +211,8 @@ const Home = () => {
                         <p className="text-xs text-gray-500">09.04.2021. - Design - Jewelry</p>
                         <h3 className="font-bold text-lg mt-2 mb-1">Why Not Overuse Leopard?</h3>
                         <p className="text-sm text-gray-600 mb-2">
-                            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis
+                            Whether on fabric, metals, or accessories, animal print roars with confidence.
+                            So go ahead — clash it, stack it, layer it.
                         </p>
                         <a href="#" className="text-red-600 italic text-sm hover:underline">Read More</a>
                     </div>
@@ -224,9 +241,8 @@ const Home = () => {
                     Your browser does not support the video tag.
                 </video>
             </div>
-
             <div>
-                <BestProducts />
+                <ProductGrid />
             </div>
 
 
@@ -241,7 +257,7 @@ const Home = () => {
                 </div>
 
                 {/* Footer Section */}
-                
+
 
                 <Footer />
             </div>

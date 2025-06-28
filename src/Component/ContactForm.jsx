@@ -29,7 +29,8 @@ const ContactForm = () => {
     <div className="w-full md:w-1/2 bg-[#fdf6f2] p-10 flex flex-col justify-center" data-aos="zoom-in">
       <h2 className="text-2xl font-bold mb-2">Contact Us or Visit</h2>
       <p className="text-sm text-gray-600 mb-8">
-        Quo ad facer evertitur scriptorem, ad aeque munere gubergren sit...
+        We're here to help — whether you're reaching out online or walking through our doors.
+Connect with our team for product inquiries, custom orders, or just to say hello.
       </p>
 
       <form className="space-y-4" onSubmit={handleSubmit}>

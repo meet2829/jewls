@@ -11,20 +11,21 @@ const Aboutus = () => {
   return (
     <div>
       <header className="z-20 relative flex justify-between items-center px-8 py-6">
-        <div className="text-3xl font-bold">Jewls</div>
-        <nav className="hidden md:flex space-x-6 text-sm">
-          <Link to="/" className="hover:underline">Home</Link>
-          <Link to="/blog" className="hover:underline">Blog</Link>
-          <Link to="/shop" className="hover:underline">Shop</Link>
-          <Link to="/contactus" className="hover:underline">Contact Us</Link>
-          <Link to="/aboutus" className="hover:underline">About Us</Link>
-        </nav>
-        <div className="flex space-x-4 items-center">
-          <Link to="/login" className="hover:underline">Login</Link>
-          <button>🔍</button>
-          <button>🛒(0)</button>
-        </div>
-      </header>
+                    <div className="text-3xl font-bold">Jewls</div>
+                    <nav className="hidden md:flex space-x-6 text-sm">
+                        <Link to="/" className="hover:underline">Home</Link>
+                        <Link to="/blog" className="hover:underline">Blog</Link>
+                        <Link to="/shop" className="hover:underline">Shop</Link>
+                        <Link to="/contactus" className="hover:underline">Contact Us</Link>
+                        <Link to="/aboutus" className="hover:underline">About Us</Link>
+                    </nav>
+                    <div className="flex space-x-4 items-center">
+                        <Link to="/login" className="hover:underline">Login</Link>
+                        <button>🔍</button>
+                        <Link to="/Cartpage" className="hover:underline">🛒(0)</Link>
+                        
+                    </div>
+                </header>
 
       <div className="font-sans bg-[#fff8f5] text-[#111]">
 
@@ -96,7 +97,6 @@ const Aboutus = () => {
             </div>
           </div>
         </section>
-
         {/* Testimonials */}
         <section className="max-w-4xl mx-auto px-4 py-16" data-aos="zoom-in-up">
           <h2 className="text-2xl font-semibold text-center mb-8">What Our Customers Say</h2>

@@ -3,9 +3,8 @@ import React from 'react'
 const Footer = () => {
   return (
     <div>
-
-        <footer className="bg-[#111] text-white py-16 px-8">
-                    <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+        <footer className="bg-[#111] text-white py-16 px-8 ">
+                    <div className="mx-auto  max-w-6xl  grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-30 ">
 
                         {/* About */}
                         <div>
@@ -34,28 +33,7 @@ const Footer = () => {
                             </ul>
                         </div>
 
-                        {/* Blog */}
-                        <div>
-                            <h4 className="font-bold text-lg mb-4">Read Our Blog Weekly</h4>
-                            <ul className="space-y-4 text-sm text-gray-400">
-                                <li>
-                                    <p>Style is who you are</p>
-                                    <span className="text-xs text-gray-500">05.04.2021</span>
-                                </li>
-                                <li>
-                                    <p>Fashion Fades. Style is eternal.</p>
-                                    <span className="text-xs text-gray-500">07.04.2021</span>
-                                </li>
-                                <li>
-                                    <p>Elegance is paramount</p>
-                                    <span className="text-xs text-gray-500">07.04.2021</span>
-                                </li>
-                                <li>
-                                    <p>Little special black dress</p>
-                                    <span className="text-xs text-gray-500">07.04.2021</span>
-                                </li>
-                            </ul>
-                        </div>
+                        
 
                         {/* Subscribe */}
                         <div>

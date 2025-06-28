@@ -11,7 +11,7 @@ const Blog = () => {
 
 
   return (
-    <div className="font-sans bg-[#fcedeb] text-[#111]">
+    <div className="font-sans bg-[#fcedeb]  text-[#111]">
       {/* Header */}
       <header className="z-20 relative flex justify-between items-center px-8 py-6">
         <div className="text-3xl font-bold">Jewls</div>

@@ -9,6 +9,8 @@ import Aboutus from './Component/Aboutus';
 import Contactus from './Component/Contactus';
 import Shop from './Component/Shop';
 import AuthForm from './Component/AuthForm';
+import CartPage from './Component/CartPage';
+import ProductDetail from './pages/ProductDetail';
 
 const Allroutes = () => {
   return (
@@ -20,7 +22,9 @@ const Allroutes = () => {
             <Route path='/blog' element={<Blog />}></Route>
             <Route path='/contactus' element={<Contactus />}></Route>
             <Route path='/shop' element={<Shop />}></Route>
+            <Route path='/Cartpage' element={<CartPage />}></Route>
             <Route path='/login' element={<AuthForm />}></Route>
+            <Route path='/product/:id' element={<ProductDetail />}></Route>
         </Routes>
       
     </div>

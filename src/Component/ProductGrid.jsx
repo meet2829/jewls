@@ -20,8 +20,8 @@ const ProductGrid = () => {
         The <span className="font-bold not-italic">Best</span> Products
       </h2>
       <p className="text-gray-500 max-w-2xl mx-auto text-sm mb-10" data-aos="zoom-in">
-        Brute instructor cu mea, pro ad facer scaevola accommodare. Augue legendos inimicus sed et, ad est
-        alterum equidem Brute instructor cu mea, pro ad facer.
+        The Best Products for your brightest season.
+        From sunrise earrings to sunset-gold rings, every piece in our Summer Edit is made to shine under the sun.
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">

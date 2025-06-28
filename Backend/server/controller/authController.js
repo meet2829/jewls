@@ -1,6 +1,19 @@
 const Employee = require("../model/user");
 const Contact = require("../model/contact");
+const nodemailer = require('nodemailer');
 
+
+const otpStore = {};
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'kananimeet46867@gmail.com', // ✅ Replace with your actual Gmail
+    pass: 'rwjdbxwvbramzgfs'     // ✅ Use the Gmail App Password
+} 
+});
+
+// Registration
 exports.register = async (req, res) => {
   try {
     const newUser = await Employee.create(req.body);
@@ -10,6 +23,7 @@ exports.register = async (req, res) => {
   }
 };
 
+//  Login
 exports.login = async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -25,13 +39,43 @@ exports.login = async (req, res) => {
   }
 };
 
-exports.Contact=async(req,res)=>{
-
-    try {
+//  Contact form
+exports.Contact = async (req, res) => {
+  try {
     const contact = await Contact.create(req.body);
     res.status(201).json(contact);
   } catch (err) {
     res.status(500).json({ message: "Error saving contact", error: err });
   }
+};
 
+//  Send OTP
+exports.emialotp = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    otpStore[email] = otp;
+
+    await transporter.sendMail({
+      from: 'your_email@gmail.com',
+      to: email,
+      subject: 'Your OTP Code',
+      text: `Your OTP is ${otp}`
+    });
+
+    res.json({ message: 'OTP sent' });
+  } catch (err) {
+    console.error("Failed to send OTP:", err);
+    res.status(500).json({ message: 'Failed to send OTP' });
+  }
+};
+
+//  Verify OTP
+exports.verifyotp = (req, res) => {
+  const { email, otp } = req.body;
+  if (otpStore[email] == otp) {
+    delete otpStore[email];
+    return res.json({ message: 'OTP verified' });
+  }
+  return res.status(400).json({ message: 'Invalid OTP' });
 };
