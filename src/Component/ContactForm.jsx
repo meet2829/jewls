@@ -17,7 +17,7 @@ const ContactForm = () => {
     e.preventDefault();
 
     try {
-      const res = await axios.post("http://localhost:8080/contact", formData);
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/contact`, formData);
       alert("Message sent successfully!");
     } catch (error) {
       console.error("Error sending message", error);

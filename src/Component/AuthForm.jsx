@@ -27,7 +27,7 @@ const AuthForm = () => {
     const { name, email, password } = formData;
 
     if (isSignUp && step === 1) {
-      axios.post('http://localhost:8080/send-otp', { email })
+      axios.post(`${import.meta.env.VITE_API_URL}/send-otp`, { email })
         .then(res => {
           alert('OTP sent to your email');
           setStep(2); // move to OTP input
@@ -37,10 +37,10 @@ const AuthForm = () => {
           alert('Error sending OTP');
         });
     } else if (isSignUp && step === 2) {
-      axios.post('http://localhost:8080/verify-otp', { email, otp })
+      axios.post('${import.meta.env.VITE_API_URL}/verify-otp', { email, otp })
         .then(res => {
           // Register after OTP verification
-          return axios.post('http://localhost:8080/register', { name, email, password });
+          return axios.post(`${import.meta.env.VITE_API_URL}/register`, { name, email, password });
         })
         .then(res => {
           alert('Registered successfully');
@@ -54,7 +54,7 @@ const AuthForm = () => {
         });
     } else {
       // Regular login
-      axios.post('http://localhost:8080/login', { email, password })
+      axios.post(`${import.meta.env.VITE_API_URL}/login`, { email, password })
         .then(res => {
           alert('Logged in successfully');
         })
