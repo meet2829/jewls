@@ -24,8 +24,8 @@ const Blog = () => {
         </nav>
         <div className="flex space-x-4 items-center">
           <Link to="/login" className="hover:underline">Login</Link>
-          <button>🔍</button>
-          <button>🛒(0)</button>
+          
+          <button>🛒</button>
         </div>
       </header>
 

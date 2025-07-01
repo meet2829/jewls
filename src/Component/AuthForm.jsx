@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import loginbg from '../assets/Login-bg.jpg'
+import { useNavigate } from 'react-router-dom';
+
+
+
 
 const AuthForm = () => {
+  const navigate = useNavigate();
+
   const [isSignUp, setIsSignUp] = useState(false);
   const [step, setStep] = useState(1); // 1 = Form, 2 = OTP
   const [otp, setOtp] = useState('');
@@ -57,6 +63,7 @@ const AuthForm = () => {
       axios.post(`${import.meta.env.VITE_API_URL}/login`, { email, password })
         .then(res => {
           alert('Logged in successfully');
+          navigate('/');
         })
         .catch(err => {
           console.error(err);

@@ -19,8 +19,8 @@ const Shop = () => {
                     </nav>
                     <div className="flex space-x-4 items-center">
                         <Link to="/login" className="hover:underline">Login</Link>
-                        <button>🔍</button>
-                        <Link to="/Cartpage" className="hover:underline">🛒(0)</Link>
+                        
+                        <Link to="/Cartpage" className="hover:underline">🛒</Link>
                         
                     </div>
                 </header>
