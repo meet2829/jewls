@@ -40,6 +40,8 @@ const Home = () => {
                         <Link to="/shop" className="hover:underline">Shop</Link>
                         <Link to="/contactus" className="hover:underline">Contact Us</Link>
                         <Link to="/aboutus" className="hover:underline">About Us</Link>
+                        <Link to="/admin" className="hover:underline">Admin</Link>
+
                     </nav>
                     <div className="flex space-x-4 items-center">
                         <Link to="/login" className="hover:underline">Login</Link>

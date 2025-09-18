@@ -142,7 +142,7 @@ const AdminPanel = () => {
             </div>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 m-10">
-           
+            
             <div className="bg-gradient-to-b from-gray-50 rounded-xl shadow-lg p-6">
               <h3 className="text-xl font-semibold text-blue-600 mb-4 border-b pb-2">Total Profit</h3>
               <MonthlyProfitChart orders={orders} width="100%" height={300} />
