@@ -3,6 +3,10 @@ import ProductForm from "./ProductForm";
 import ProductList from "./ProductList";
 import UsersList from "./UserList";
 import { User, LayoutDashboard, ShoppingBasket, SquarePlus, ShoppingBag, UserStar } from "lucide-react";
+import CatagoryPieChart from "./Charts/CatagoryPieChart";
+import MonthlyOrderChart from "./Charts/MonthlyOrderChart";
+import MonthlyProfitChart from "./Charts/MonthlyProfitChart";
+import MonthlyUserChart from "./Charts/MonthlyUserChart";
 
 
 const AdminPanel = () => {
@@ -18,27 +22,28 @@ const AdminPanel = () => {
     setProducts(data);
   };
 
- const fetchOrders = async () => {
-  const res = await fetch(`${import.meta.env.VITE_API_URL}/api/orders`);
-  const data = await res.json();
-  setOrders(data);
-};
+  const fetchOrders = async () => {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/orders`);
+    const data = await res.json();
+    setOrders(data);
+  };
 
   const fetchUsers = async () => {
     const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/users`);
     const data = await res.json();
+    console.log("user fetched:", data);
     setUsers(data);
   };
 
   const fetchOrderDetails = async (orderId) => {
-  try {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/orders/${orderId}`);
-    const data = await res.json();
-    setSelectedOrder(data);
-  } catch (err) {
-    console.error("Error fetching order details:", err);
-  }
-};
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/orders/${orderId}`);
+      const data = await res.json();
+      setSelectedOrder(data);
+    } catch (err) {
+      console.error("Error fetching order details:", err);
+    }
+  };
 
   useEffect(() => {
     fetchProducts();
@@ -105,10 +110,10 @@ const AdminPanel = () => {
 
 
       {/* Main Content */}
-      <div className="flex-1 p-8">
+      <div className="flex-1 p-8 bg-black">
         {/* Top Navbar */}
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold capitalize">{activeTab}</h2>
+          <h2 className=" text-white text-2xl font-bold capitalize">{activeTab}</h2>
 
           <div className="flex gap-5 " >
             <UserStar className="w-8 h-10" />
@@ -117,26 +122,52 @@ const AdminPanel = () => {
         </div>
 
         {/* Content */}
-        {activeTab === "dashboard" && (
+        {activeTab === "dashboard" && (<>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-white p-4 rounded shadow">
+            <div className="bg-gray-400 p-4 rounded shadow">
               <h3 className="font-bold">Total Products</h3>
               <p className="text-2xl">{products.length}</p>
             </div>
-            <div className="bg-white p-4 rounded shadow">
+            <div className="bg-gray-400 p-4 rounded shadow">
               <h3 className="font-bold">Total Orders</h3>
               <p className="text-2xl">{orders.length}</p>
             </div>
-            <div className="bg-white p-4 rounded shadow">
+            <div className="bg-gray-400 p-4 rounded shadow">
               <h3 className="font-bold">Total Users</h3>
               <p className="text-2xl">{users.length}</p>
             </div>
-            <div className="bg-white p-4 rounded shadow">
+            <div className="bg-gray-400 p-4 rounded shadow">
               <h3 className="font-bold">Total Profit</h3>
               <p className="text-2xl">₹{totalProfit}</p>
             </div>
           </div>
-        )}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 m-10">
+           
+            <div className="bg-gradient-to-b from-gray-50 rounded-xl shadow-lg p-6">
+              <h3 className="text-xl font-semibold text-blue-600 mb-4 border-b pb-2">Total Profit</h3>
+              <MonthlyProfitChart orders={orders} width="100%" height={300} />
+            </div>
+            <div className="bg-gradient-to-b from-gray-50 rounded-xl shadow-lg p-6">
+              <h3 className="text-xl font-semibold text-green-600 mb-4 border-b pb-2">Monthly Orders</h3>
+              <MonthlyOrderChart orders={orders} width="100%" height={300} />
+            </div>
+
+           
+            {/* <div className="bg-gradient-to-b from-gray-50 rounded-xl shadow-lg p-6">
+              <h3 className="text-xl font-semibold text-purple-600 mb-4 border-b pb-2">Product Categories</h3>
+              <CatagoryPieChart products={products} />
+            </div> */}
+
+{/*             
+            <div className="bg-gradient-to-b from-gray-50 rounded-xl shadow-lg p-6">
+              <h3 className="text-xl font-semibold text-yellow-600 mb-4 border-b pb-2">Total Users</h3>
+              <MonthlyUserChart users={users} />
+            </div> */}
+          </div>
+
+
+
+        </>)}
 
         {activeTab === "products" && (
           <ProductList products={products} refreshProducts={fetchProducts} />
@@ -163,7 +194,7 @@ const AdminPanel = () => {
                 {orders.map((order) => (
                   <tr key={order._id}>
                     <td className="border p-2">{order._id}</td>
-                    <td className="border p-2">{order.user?.name || "N/A"}</td>
+                    <td className="border p-2">{order.userName || "N/A"}</td>
                     <td className="border p-2">₹{order.total}</td>
                     <td className="border p-2">{order.status}</td>
                     <td className="border p-2">
@@ -183,7 +214,7 @@ const AdminPanel = () => {
             {selectedOrder && (
               <div className="mt-6 p-4 border rounded bg-gray-50">
                 <h4 className="text-lg font-bold mb-2">Order Details</h4>
-                <p><strong>User:</strong> {selectedOrder.user?.name} ({selectedOrder.user?.email})</p>
+                <p><strong>User:</strong> {selectedOrder.user?.name || selectedOrder.userName} ({selectedOrder.user?.email})</p>
                 <p><strong>Total:</strong> ₹{selectedOrder.total}</p>
                 <p><strong>Status:</strong> {selectedOrder.status}</p>
 
@@ -191,7 +222,7 @@ const AdminPanel = () => {
                 <ul className="list-disc ml-6">
                   {selectedOrder.items?.map((item, idx) => (
                     <li key={idx}>
-                      {item.product?.name} × {item.quantity} = ₹
+                      {item.product?.name || "Product"} × {item.quantity} = ₹
                       {(item.product?.price * item.quantity).toFixed(2)}
                     </li>
                   ))}

@@ -67,7 +67,7 @@ const ProductList = ({ products, refreshProducts }) => {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-6 text-gray-800">📦 Product List</h2>
+      <h2 className="text-2xl font-bold mb-6 text-white">📦 Product List</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {products.map((product) => (
           <div

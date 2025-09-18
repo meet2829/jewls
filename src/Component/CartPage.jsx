@@ -29,37 +29,46 @@ const CartPage = () => {
 
 
   const handleCheckout = async () => {
-    try {
-      const user = JSON.parse(localStorage.getItem("user")); 
-      if (!user?._id) {
-        alert("Please login to place order");
-        return;
-      }
+  try {
+    const user = JSON.parse(localStorage.getItem("user")); 
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/orders`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          userId: user._id,
-          cart,
-          totalAmount: getTotal(),
-        }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        alert("Order placed successfully!");
-        localStorage.removeItem("cart");
-        setCart([]);
-      } else {
-        alert(data.message || "Failed to place order");
-      }
-    } catch (err) {
-      console.error("Checkout error:", err);
-      alert("Something went wrong");
+    if (!user?._id) {
+      alert("Please login to place order");
+      return;
     }
-  };
+
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/orders`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        user: user._id,               // ObjectId of User
+        userName: user.name,          // User name
+        items: cart.map((item) => ({
+          product: item._id,          // ObjectId of Product
+          quantity: item.quantity,
+        })),
+        total: cart.reduce((sum, item) => sum + item.price * item.quantity, 0), // total price
+      }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      alert("Order placed successfully!");
+      localStorage.removeItem("cart");
+      setCart([]);
+    } else {
+      alert(data.message || "Failed to place order");
+    }
+  } catch (err) {
+    console.error("Checkout error:", err);
+    alert("Something went wrong");
+  }
+};
+
+
+
   return (
     <div>
       <header className="z-20 relative flex justify-between items-center px-8 py-6">
