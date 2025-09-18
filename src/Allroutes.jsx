@@ -11,6 +11,7 @@ import Shop from './Component/Shop';
 import AuthForm from './Component/AuthForm';
 import CartPage from './Component/CartPage';
 import ProductDetail from './pages/ProductDetail';
+import AdminPanel from './Admin/AdminPanel';
 
 const Allroutes = () => {
   return (
@@ -25,6 +26,7 @@ const Allroutes = () => {
             <Route path='/Cartpage' element={<CartPage />}></Route>
             <Route path='/login' element={<AuthForm />}></Route>
             <Route path='/product/:id' element={<ProductDetail />}></Route>
+            <Route path='/admin' element={<AdminPanel />}></Route>
         </Routes>
       
     </div>

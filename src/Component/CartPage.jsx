@@ -26,9 +26,42 @@ const CartPage = () => {
     setCart(updatedCart);
     localStorage.setItem('cart', JSON.stringify(updatedCart));
   };
-  return (  
-    <div>
 
+
+  const handleCheckout = async () => {
+    try {
+      const user = JSON.parse(localStorage.getItem("user")); 
+      if (!user?._id) {
+        alert("Please login to place order");
+        return;
+      }
+
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/orders`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: user._id,
+          cart,
+          totalAmount: getTotal(),
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert("Order placed successfully!");
+        localStorage.removeItem("cart");
+        setCart([]);
+      } else {
+        alert(data.message || "Failed to place order");
+      }
+    } catch (err) {
+      console.error("Checkout error:", err);
+      alert("Something went wrong");
+    }
+  };
+  return (
+    <div>
       <header className="z-20 relative flex justify-between items-center px-8 py-6">
         <div className="text-3xl font-bold">Jewls</div>
         <nav className="hidden md:flex space-x-6 text-sm">
@@ -102,7 +135,10 @@ const CartPage = () => {
               <p className="text-xl font-bold">
                 Total: {getTotal().toFixed(2)}
               </p>
-              <button className="mt-4 px-6 py-3 bg-red-700 text-white rounded hover:bg-red-800">
+              <button
+                onClick={handleCheckout}
+                className="mt-4 px-6 py-3 bg-red-700 text-white rounded hover:bg-red-800"
+              >
                 Proceed to Checkout
               </button>
             </div>

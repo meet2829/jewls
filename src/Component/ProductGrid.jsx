@@ -6,7 +6,7 @@ const ProductGrid = () => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-      axios.get(`${import.meta.env.VITE_API_URL}/products`)
+      axios.get(`${import.meta.env.VITE_API_URL}/api/products/products`)
       .then(res => setProducts(res.data))
       .catch(err => console.error("Error fetching products", err));
   }, []);
