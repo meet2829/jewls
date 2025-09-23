@@ -48,6 +48,7 @@ const AuthForm = () => {
           // Register after OTP verification
           return axios.post(`${import.meta.env.VITE_API_URL}/api/auth/register`, { name, email, password });
         })
+        
         .then(res => {
           alert('Registered successfully');
           setIsSignUp(false);

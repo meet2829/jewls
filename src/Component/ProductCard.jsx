@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
 import { addToCart } from '../Component/utils/cartUtils';
+import { Bounce, toast, ToastContainer } from 'react-toastify';
 
 const ProductCard = ({ product }) => {
+
+
   return (
     <div className="relative border p-4 rounded-md shadow hover:shadow-lg transition flex flex-col justify-between">
       {product.sale && (
@@ -25,20 +28,29 @@ const ProductCard = ({ product }) => {
       <div className="text-red-700 text-sm">{product.rating || '★★★★☆'}</div>
       <p className="mt-1 mb-3">
         {product.oldPrice && (
-          <span className="line-through text-gray-400 mr-2">{product.oldPrice}</span>
+          <span className="line-through text-gray-400 mr-2">₨ {product.oldPrice}</span>
         )}
-        <span className="text-lg font-medium text-gray-800">{product.price}</span>
+        <span className="text-lg font-medium text-gray-800">₨ {product.price}</span>
       </p>
-
       <button
-                onClick={() => {
-                  addToCart(product);
-                  alert("Added to cart!");
-                }}
-                className="bg-red-700 text-white px-6 py-3 rounded hover:bg-red-800 transition"
-              >
-                Add to Cart
-              </button>
+        onClick={() => {
+          addToCart(product);
+          toast.success(`${product.name} added to cart 🛒`, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+          });
+        }}
+        className="bg-red-700 text-white px-6 py-3 rounded hover:bg-red-800 transition"
+      >
+        Add to Cart
+      </button>
     </div>
   );
 };

@@ -120,7 +120,6 @@ const AdminPanel = () => {
             <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Logout</button>
           </div>
         </div>
-
         {/* Content */}
         {activeTab === "dashboard" && (<>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -142,7 +141,7 @@ const AdminPanel = () => {
             </div>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 m-10">
-            
+
             <div className="bg-gradient-to-b from-gray-50 rounded-xl shadow-lg p-6">
               <h3 className="text-xl font-semibold text-blue-600 mb-4 border-b pb-2">Total Profit</h3>
               <MonthlyProfitChart orders={orders} width="100%" height={300} />

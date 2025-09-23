@@ -22,7 +22,7 @@ const ProductForm = ({ refreshProducts }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await fetch(`${import.meta.env.VITE_API_URL}/products`, {
+    await fetch(`${import.meta.env.VITE_API_URL}/api/products/products`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
@@ -47,12 +47,12 @@ const ProductForm = ({ refreshProducts }) => {
     >
       <h2 className="text-xl font-semibold">➕ Add Product</h2>
 
-      <input name="name" placeholder="Product Name" value={formData.name} onChange={handleChange} className="border p-2 w-full rounded" />
-      <input name="price" type="number" placeholder="Price" value={formData.price} onChange={handleChange} className="border p-2 w-full rounded" />
+      <input name="name" placeholder="Product Name" value={formData.name} onChange={handleChange} required className="border p-2 w-full rounded" />
+      <input name="price" type="number" placeholder="Price" value={formData.price} onChange={handleChange} required className="border p-2 w-full rounded" />
       <input name="oldPrice" type="number" placeholder="Old Price" value={formData.oldPrice} onChange={handleChange} className="border p-2 w-full rounded" />
-      <input name="description" placeholder="Description" value={formData.description} onChange={handleChange} className="border p-2 w-full rounded" />
+      <input name="description" placeholder="Description" value={formData.description} onChange={handleChange} required className="border p-2 w-full rounded" />
       <input name="imageUrl" placeholder="Image URL" value={formData.imageUrl} onChange={handleChange} className="border p-2 w-full rounded" />
-      <input name="category" placeholder="Category" value={formData.category} onChange={handleChange} className="border p-2 w-full rounded" />
+      <input name="category" placeholder="Category" value={formData.category} onChange={handleChange} required className="border p-2 w-full rounded" />
       <input name="rating" placeholder="Rating (e.g. ★★★★☆)" value={formData.rating} onChange={handleChange} className="border p-2 w-full rounded" />
 
       <label className="flex items-center space-x-2">

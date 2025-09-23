@@ -9,7 +9,7 @@ const ProductDetail = () => {
   const [product, setProduct] = useState(null);
 
   useEffect(() => {
-    axios.get(`http://localhost:8080/products/${id}`)
+     axios.get(`${import.meta.env.VITE_API_URL}/api/products/products/${id}`)
       .then(res => setProduct(res.data))
       .catch(err => console.error('Error fetching product', err));
   }, [id]);
@@ -49,9 +49,9 @@ const ProductDetail = () => {
         <div className="text-red-600 my-2">{product.rating || '★★★★☆'}</div>
         <p className="text-lg font-medium text-gray-800 mb-4">
           {product.oldPrice && (
-            <span className="line-through text-gray-400 mr-2">${product.oldPrice}</span>
+            <span className="line-through text-gray-400 mr-2">₨ {product.oldPrice}</span>
           )}
-          ${product.price}
+          ₨ {product.price}
         </p>
         <p className="text-sm text-gray-700 mb-6">{product.description}</p>
         <button

@@ -1,4 +1,4 @@
-// utils/cartUtils.js
+
 
 // Get cart from localStorage
 export const getCart = () => {
@@ -16,7 +16,7 @@ export const addToCart = (product) => {
   } else {
     cart.push({ ...product, quantity: 1 });
   }
-
+  
   localStorage.setItem('cart', JSON.stringify(cart));
   return cart;
 };
