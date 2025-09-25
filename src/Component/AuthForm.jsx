@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import loginbg from '../assets/Login-bg.jpg'
 import { useNavigate } from 'react-router-dom';
+import { Bounce, toast } from 'react-toastify';
 
 
 
@@ -35,35 +36,89 @@ const AuthForm = () => {
     if (isSignUp && step === 1) {
       axios.post(`${import.meta.env.VITE_API_URL}/api/auth/send-otp`, { email })
         .then(res => {
-          alert('OTP sent to your email');
+
+          toast.success('OTP sent to your email', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+          });
           setStep(2); // move to OTP input
         })
         .catch(err => {
           console.error(err);
-          alert('Error sending OTP');
+          toast.error('Error sending OTP', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+          });
         });
     } else if (isSignUp && step === 2) {
-      axios.post('${import.meta.env.VITE_API_URL}/api/auth/verify-otp', { email, otp })
+      axios.post(`${import.meta.env.VITE_API_URL}/api/auth/verify-otp`, { email, otp })
         .then(res => {
           // Register after OTP verification
           return axios.post(`${import.meta.env.VITE_API_URL}/api/auth/register`, { name, email, password });
         })
-        
+
         .then(res => {
-          alert('Registered successfully');
+
+          toast.success('Registered successfully', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+          });
           setIsSignUp(false);
           setStep(1);
           setFormData({ name: '', email: '', password: '' });
         })
         .catch(err => {
           console.error(err);
-          alert('OTP verification or registration failed');
+
+          toast.error('OTP verification or registration failed', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+          });
         });
     } else {
       // Regular login
       axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`, { email, password })
         .then(res => {
-          alert('Logged in successfully');
+          
+          toast.success('Logged in successfully', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+          });
           localStorage.setItem("user", JSON.stringify(res.data.user)); // 👈 save user
           navigate('/');
         })

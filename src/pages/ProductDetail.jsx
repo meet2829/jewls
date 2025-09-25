@@ -9,7 +9,7 @@ const ProductDetail = () => {
   const [product, setProduct] = useState(null);
 
   useEffect(() => {
-     axios.get(`${import.meta.env.VITE_API_URL}/api/products/products/${id}`)
+    axios.get(`${import.meta.env.VITE_API_URL}/api/products/products/${id}`)
       .then(res => setProduct(res.data))
       .catch(err => console.error('Error fetching product', err));
   }, [id]);
@@ -18,54 +18,65 @@ const ProductDetail = () => {
 
   return (
 
-<div>
-    <header className="z-20 relative flex justify-between items-center px-8 py-6">
-                    <div className="text-3xl font-bold">Jewls</div>
-                    <nav className="hidden md:flex space-x-6 text-sm">
-                        <Link to="/" className="hover:underline">Home</Link>
-                        <Link to="/blog" className="hover:underline">Blog</Link>
-                        <Link to="/shop" className="hover:underline">Shop</Link>
-                        <Link to="/contactus" className="hover:underline">Contact Us</Link>
-                        <Link to="/aboutus" className="hover:underline">About Us</Link>
-                    </nav>
-                    <div className="flex space-x-4 items-center">
-                        <Link to="/login" className="hover:underline">Login</Link>
-                        <button>🔍</button>
-                        <Link to="/Cartpage" className="hover:underline">🛒(0)</Link>
-                        
-                    </div>
-                </header>
+    <div>
+      <header className="z-20 relative flex justify-between items-center px-8 py-6">
+        <div className="text-3xl font-bold">Jewls</div>
+        <nav className="hidden md:flex space-x-6 text-sm">
+          <Link to="/" className="hover:underline">Home</Link>
+          <Link to="/blog" className="hover:underline">Blog</Link>
+          <Link to="/shop" className="hover:underline">Shop</Link>
+          <Link to="/contactus" className="hover:underline">Contact Us</Link>
+          <Link to="/aboutus" className="hover:underline">About Us</Link>
+        </nav>
+        <div className="flex space-x-4 items-center">
+          <Link to="/login" className="hover:underline">Login</Link>
+          <button>🔍</button>
+          <Link to="/Cartpage" className="hover:underline">🛒(0)</Link>
 
-    
-    <div className="p-10 max-w-4xl mx-auto flex flex-col md:flex-row gap-10 items-start">
-      <img
-        src={product.imageUrl}
-        alt={product.name}
-        className="w-full md:w-1/2 h-96 object-contain border rounded"
-      />
-      <div className="flex-1">
-        <h2 className="text-3xl font-bold mb-2">{product.name}</h2>
-        <p className="text-sm uppercase text-gray-500 tracking-wider">{product.category}</p>
-        <div className="text-red-600 my-2">{product.rating || '★★★★☆'}</div>
-        <p className="text-lg font-medium text-gray-800 mb-4">
-          {product.oldPrice && (
-            <span className="line-through text-gray-400 mr-2">₨ {product.oldPrice}</span>
-          )}
-          ₨ {product.price}
-        </p>
-        <p className="text-sm text-gray-700 mb-6">{product.description}</p>
-        <button
-          onClick={() => {
-            addToCart(product);
-            alert("Added to cart!");
-          }}
-          className="bg-red-700 text-white px-6 py-3 rounded hover:bg-red-800 transition"
-        >
-          Add to Cart
-        </button>
+        </div>
+      </header>
+
+
+      <div className="p-10 max-w-4xl mx-auto flex flex-col md:flex-row gap-10 items-start">
+        <img
+          src={product.imageUrl}
+          alt={product.name}
+          className="w-full md:w-1/2 h-96 object-contain border rounded"
+        />
+        <div className="flex-1">
+          <h2 className="text-3xl font-bold mb-2">{product.name}</h2>
+          <p className="text-sm uppercase text-gray-500 tracking-wider">{product.category}</p>
+          <div className="text-red-600 my-2">{product.rating || '★★★★☆'}</div>
+          <p className="text-lg font-medium text-gray-800 mb-4">
+            {product.oldPrice && (
+              <span className="line-through text-gray-400 mr-2">₨ {product.oldPrice}</span>
+            )}
+            ₨ {product.price}
+          </p>
+          <p className="text-sm text-gray-700 mb-6">{product.description}</p>
+          <button
+            onClick={() => {
+              addToCart(product);
+              
+              toast.success('Added to cart!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+              });
+            }}
+            className="bg-red-700 text-white px-6 py-3 rounded hover:bg-red-800 transition"
+          >
+            Add to Cart
+          </button>
+        </div>
       </div>
-    </div>
-</div> );
+    </div>);
 };
 
 export default ProductDetail;

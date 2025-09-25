@@ -27,7 +27,7 @@ const OrdersPage = () => {
     return <p className="p-6 text-center">Please login to view your orders.</p>;
   }
 
-  // Status badge helper
+  
   const getStatusBadge = (status) => {
     switch (status) {
       case "Delivered":
@@ -62,7 +62,6 @@ const OrdersPage = () => {
   return (
     <div className="max-w-6xl mx-auto p-6">
       <h1 className="text-3xl font-bold mb-8 text-gray-800">My Orders</h1>
-
       {orders.length === 0 ? (
         <div className="text-center text-gray-500">
           <p className="text-lg">😕 You don’t have any orders yet.</p>
@@ -74,7 +73,7 @@ const OrdersPage = () => {
               key={order._id}
               className="bg-white shadow-lg rounded-2xl p-6 border hover:shadow-xl transition"
             >
-              {/* Header */}
+              
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
                 <div>
                   <p className="text-sm text-gray-500">Order ID: {order._id}</p>
@@ -85,7 +84,7 @@ const OrdersPage = () => {
                 <div className="mt-2 md:mt-0">{getStatusBadge(order.status)}</div>
               </div>
 
-              {/* Items */}
+              
               <div className="divide-y">
                 {order.items.map((item) => (
                   <div
@@ -116,8 +115,7 @@ const OrdersPage = () => {
                   </div>
                 ))}
               </div>
-
-              {/* Footer */}
+              
               <div className="flex justify-between items-center mt-6 pt-4 border-t">
                 <p className="font-bold text-lg text-gray-800">
                   Grand Total: ₹{order.total}

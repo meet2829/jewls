@@ -21,12 +21,34 @@ const ProductList = ({ products, refreshProducts }) => {
       });
       if (!res.ok) {
         const error = await res.json();
-        alert("Error deleting: " + (error.message || res.status));
+
+        toast.error("Error deleting: " + (error.message || res.status), {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
         return;
       }
       refreshProducts();
     } catch (err) {
-      alert("Network error while deleting product");
+
+      toast.error('Network error while deleting product', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
     }
   };
 
@@ -55,13 +77,35 @@ const ProductList = ({ products, refreshProducts }) => {
       });
       if (!res.ok) {
         const error = await res.json();
-        alert("Error updating: " + (error.message || res.status));
+
+        toast.error("Error updating: " + (error.message || res.status), {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
         return;
       }
       setEditingProduct(null);
       refreshProducts();
     } catch (err) {
-      alert("Network error while updating product");
+      
+      toast.error('Network error while updating product', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
     }
   };
 
@@ -130,7 +174,7 @@ const ProductList = ({ products, refreshProducts }) => {
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
           <div className="bg-white rounded-3xl p-8 w-96 shadow-2xl animate-fadeIn">
             <h2 className="text-2xl font-bold mb-6 text-gray-800">✏️ Edit Product</h2>
-            
+
             <div className="space-y-3">
               <input
                 name="name"

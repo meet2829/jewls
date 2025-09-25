@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { Bounce, toast } from "react-toastify";
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
@@ -13,15 +14,42 @@ const ContactForm = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setFormData({ firstName: '',
+    lastName: '',
+    email: '',
+    message: ''
+    })
 
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_URL}/contact`, formData);
-      alert("Message sent successfully!");
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/contact`, formData);
+
+      toast.success('Message sent successfully!', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
     } catch (error) {
       console.error("Error sending message", error);
-      alert("Failed to send message");
+
+      toast.error('Failed to send message', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
     }
   };
 
@@ -30,7 +58,7 @@ const ContactForm = () => {
       <h2 className="text-2xl font-bold mb-2">Contact Us or Visit</h2>
       <p className="text-sm text-gray-600 mb-8">
         We're here to help — whether you're reaching out online or walking through our doors.
-Connect with our team for product inquiries, custom orders, or just to say hello.
+        Connect with our team for product inquiries, custom orders, or just to say hello.
       </p>
 
       <form className="space-y-4" onSubmit={handleSubmit}>
