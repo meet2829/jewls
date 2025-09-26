@@ -47,7 +47,10 @@ const AdminPanel = () => {
   };
 
   const fetchProducts = async () => {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/products/products`);
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/products/products`,{
+    method: "GET",
+    cache: "no-cache" // 🔑 force fresh fetch
+  });
     const data = await res.json();
     setProducts(data);
   };

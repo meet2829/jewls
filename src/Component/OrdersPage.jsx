@@ -60,18 +60,19 @@ const OrdersPage = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-8 text-gray-800">My Orders</h1>
+    <div className="bg-gradient-to-t to-black">
+    <div className="max-w-6xl mx-auto p-6 ">
+      <h1 className="text-3xl font-bold mb-8 text-white">My Orders</h1>
       {orders.length === 0 ? (
         <div className="text-center text-gray-500">
           <p className="text-lg">😕 You don’t have any orders yet.</p>
         </div>
       ) : (
-        <div className="space-y-8">
+        <div className="space-y-8 ">
           {orders.map((order) => (
             <div
               key={order._id}
-              className="bg-white shadow-lg rounded-2xl p-6 border hover:shadow-xl transition"
+              className="bg-white shadow-lg rounded-2xl p-6 border hover:shadow-xl transition "
             >
               
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
@@ -129,7 +130,7 @@ const OrdersPage = () => {
         </div>
       )}
     </div>
-  );
+ </div> );
 };
 
 export default OrdersPage;

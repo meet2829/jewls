@@ -30,87 +30,72 @@ const CartPage = () => {
   };
 
 
-  const handleCheckout = async () => {
-    try {
-      const user = JSON.parse(localStorage.getItem("user"));
-      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+ const handleCheckout = async () => {
+  try {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-      if (!user?._id) {
-      
-        toast.warn('Please login to place order', {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          transition: Bounce,
-        });
-        return;
-      }
+    if (!user?._id) {
+      toast.warn("Please login to place order");
+      return;
+    }
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/orders`, {
+    // Step 1: Create Razorpay order from backend
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/api/payment/create-order`,
+      {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user: user._id,               // ObjectId of User
-          userName: user.name,          // User name
-          items: cart.map((item) => ({
-            product: item._id,          // ObjectId of Product
-            quantity: item.quantity,
-            imageUrl:item.imageUrl
-          })),
-          total: cart.reduce((sum, item) => sum + item.price * item.quantity, 0), // total price
-        }),
-      });
+        body: JSON.stringify({ amount: getTotal() }),
+      }
+    );
 
-      const data = await response.json();
+    const order = await response.json();
 
-      if (response.ok) {
-        toast.success('Order placed successfully!', {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          transition: Bounce,
+    //  Razorpay options
+    const options = {
+      key: import.meta.env.VITE_RAZORPAY_KEY_ID, // add in your .env
+      amount: order.amount,
+      currency: order.currency,
+      name: "My Jewellery Store",
+      description: "Order Payment",
+      order_id: order.id,
+      handler: async function (paymentResponse) {
+        // ✅ Payment successful → Save order in DB
+        await fetch(`${import.meta.env.VITE_API_URL}/api/orders`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            user: user._id,
+            userName: user.name,
+            items: cart.map((item) => ({
+              product: item._id,
+              quantity: item.quantity,
+              imageUrl: item.imageUrl
+            })),
+            total: getTotal(),
+            paymentId: paymentResponse.razorpay_payment_id, // save payment ID
+          }),
         });
+        
+
+        toast.success("Payment successful & Order placed!");
         localStorage.removeItem("cart");
         setCart([]);
-      } else {
+      },
+      theme: { color: "#D32F2F" },
+    };
 
-        toast.warn(data.message || "Failed to place order", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          transition: Bounce,
-        });
-      }
-    } catch (err) {
-      console.error("Checkout error:", err);
-      toast.error("Something went wrong", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
-    }
-  };
+    // Step 3: Open Razorpay checkout popup
+    const razorpay = new window.Razorpay(options);
+    razorpay.open();
+  } catch (err) {
+    console.error("Checkout error:", err);
+    toast.error("Something went wrong with payment");
+  }
+};
+
+
 
   return (
     <div>
