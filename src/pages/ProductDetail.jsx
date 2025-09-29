@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { addToCart } from '../Component/utils/cartUtils';
 import { Link } from "react-router-dom";
+import { Bounce, toast } from 'react-toastify';
+import Navbar from '../Component/Navbar';
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -19,22 +21,8 @@ const ProductDetail = () => {
   return (
 
     <div>
-      <header className="z-20 relative flex justify-between items-center px-8 py-6">
-        <div className="text-3xl font-bold">Jewls</div>
-        <nav className="hidden md:flex space-x-6 text-sm">
-          <Link to="/" className="hover:underline">Home</Link>
-          <Link to="/blog" className="hover:underline">Blog</Link>
-          <Link to="/shop" className="hover:underline">Shop</Link>
-          <Link to="/contactus" className="hover:underline">Contact Us</Link>
-          <Link to="/aboutus" className="hover:underline">About Us</Link>
-        </nav>
-        <div className="flex space-x-4 items-center">
-          <Link to="/login" className="hover:underline">Login</Link>
-          <button>🔍</button>
-          <Link to="/Cartpage" className="hover:underline">🛒(0)</Link>
-
-        </div>
-      </header>
+     <Navbar />
+      
 
 
       <div className="p-10 max-w-4xl mx-auto flex flex-col md:flex-row gap-10 items-start">

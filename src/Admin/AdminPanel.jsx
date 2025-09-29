@@ -17,8 +17,9 @@ const AdminPanel = () => {
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
   const [users, setUsers] = useState([]);
-  const [massage,setmassage]=useState([])
+  const [massage, setmassage] = useState([])
   const navigate = useNavigate()
+  const [coupons, setCoupons] = useState([]);
 
   const handleLogout = () => {
     localStorage.removeItem("isAdmin");
@@ -47,10 +48,10 @@ const AdminPanel = () => {
   };
 
   const fetchProducts = async () => {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/products/products`,{
-    method: "GET",
-    cache: "no-cache" // 🔑 force fresh fetch
-  });
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/products/products`, {
+      method: "GET",
+      cache: "no-cache" // 🔑 force fresh fetch
+    });
     const data = await res.json();
     setProducts(data);
   };
@@ -78,22 +79,35 @@ const AdminPanel = () => {
     }
   };
 
-  const fetchContectDetails=async ()=>{
-    try{
+  const fetchContectDetails = async () => {
+    try {
 
-      const res=await fetch(`${import.meta.env.VITE_API_URL}/api/auth/massage`)
-      const data=await res.json()
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/massage`)
+      const data = await res.json()
       setmassage(data)
-    }catch(err){
-        console.error("Error fetching order details:", err);
+    } catch (err) {
+      console.error("Error fetching order details:", err);
     }
   }
+
+  const fetchCoupons = async () => {
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/coupon/usage`);
+      const data = await res.json();
+      console.log("data:", data);
+      setCoupons(data);
+
+    } catch (err) {
+      console.error("Error fetching coupons:", err);
+    }
+  };
 
   useEffect(() => {
     fetchProducts();
     fetchOrders();
     fetchUsers();
     fetchContectDetails()
+    fetchCoupons();
   }, []);
 
   // Calculate profit
@@ -158,6 +172,15 @@ const AdminPanel = () => {
           >
             <MessagesSquare className="w-5 h-5 text-indigo-500" />
             <span>Massage</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab("coupons")}
+            className={`w-full flex items-center gap-3 p-2 rounded transition 
+        ${activeTab === "coupons" ? "bg-gray-700" : "hover:bg-gray-700"}`}
+          >
+            <ShoppingBag className="w-5 h-5 text-indigo-500" />
+            <span>Coupons</span>
           </button>
 
         </nav>
@@ -276,11 +299,12 @@ const AdminPanel = () => {
               </tbody>
             </table>
 
-           
-            {selectedOrder && (
+
+            {selectedOrder  && (
               <div className="mt-6 p-4 border rounded bg-gray-50">
                 <h4 className="text-lg font-bold mb-2">Order Details</h4>
                 <p><strong>User:</strong> {selectedOrder.user?.name || selectedOrder.userName} ({selectedOrder.user?.email})</p>
+                
                 <p><strong>Total:</strong> ₹{selectedOrder.total}</p>
                 <p><strong>Status:</strong> {selectedOrder.status}</p>
 
@@ -318,9 +342,48 @@ const AdminPanel = () => {
                     <td className="border p-2">{msg.lastName || "N/A"}</td>
                     <td className="border p-2">{msg.email}</td>
                     <td className="border p-2">{msg.message}</td>
-                   
                   </tr>
                 ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {activeTab === "coupons" && (
+          <div className="bg-white p-4 rounded shadow">
+            <h3 className="text-xl font-bold mb-4">Coupons Usage</h3>
+            <table className="w-full table-auto border-collapse">
+              <thead>
+                <tr className="bg-gray-200">
+                  <th className="border p-2">Coupon Code</th>
+                  <th className="border p-2">Order ID</th>
+                  <th className="border p-2">Discount Value</th>
+                  <th className="border p-2">Total Before Discount</th>
+                  <th className="border p-2">Discount Amount</th>
+                  <th className="border p-2">Total After Discount</th>
+                  <th className="border p-2">User Name</th>
+                  <th className="border p-2">Used On</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Array.isArray(coupons) && coupons.length > 0 ? (
+                  coupons.map((c) => (
+                    <tr key={c._id}>
+                      <td>{c.code}</td>
+                       <td>{c.orderId?._id|| "N/A"}</td>
+                      <td>{c.discountValue || c.discountAmount}</td>
+                      <td>{c.totalBeforeDiscount}</td>
+                      <td>{c.discountAmount}</td>
+                      <td>{c.totalAfterDiscount}</td>
+                      <td>{c.userId?.name || "Unknown"}</td>
+                      <td>{new Date(c.createdAt).toLocaleDateString()}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="8">No coupon usage found</td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
@@ -328,6 +391,7 @@ const AdminPanel = () => {
         {activeTab === "users" && (
           <UsersList users={users} />
         )}
+
       </div>
     </div>
   );
