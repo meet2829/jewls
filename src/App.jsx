@@ -5,6 +5,9 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { Bounce, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Provider } from "react-redux";
+import { store } from './Redux/store';
+
 
 
 function App() {
@@ -15,6 +18,7 @@ function App() {
 
   return (
     <div className="font-[Poppins]">
+      <Provider store={store}>
       <Allroutes />
       <ToastContainer
         position="top-right"
@@ -29,6 +33,7 @@ function App() {
         theme="light"
         transition={Bounce}
       />
+      </Provider>
     </div>
   )
 }

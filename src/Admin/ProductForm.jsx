@@ -8,15 +8,22 @@ const ProductForm = ({ refreshProducts }) => {
     description: "",
     imageUrl: "",
     category: "",
+    Stock: "",
     rating: "",
     sale: false,
   });
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+
     setFormData({
       ...formData,
-      [name]: type === "checkbox" ? checked : value,
+      [name]:
+        name === "Stock"
+          ? Math.max(0, parseInt(value) || 0) // Ensure Stock is integer >= 0
+          : type === "checkbox"
+            ? checked
+            : value,
     });
   };
 
@@ -35,6 +42,7 @@ const ProductForm = ({ refreshProducts }) => {
       imageUrl: "",
       category: "",
       rating: "",
+      Stock: "",
       sale: false,
     });
     refreshProducts();
@@ -53,6 +61,18 @@ const ProductForm = ({ refreshProducts }) => {
       <input name="description" placeholder="Description" value={formData.description} onChange={handleChange} required className="border p-2 w-full rounded" />
       <input name="imageUrl" placeholder="Image URL" value={formData.imageUrl} onChange={handleChange} className="border p-2 w-full rounded" />
       <input name="category" placeholder="Category" value={formData.category} onChange={handleChange} required className="border p-2 w-full rounded" />
+
+      <input
+        name="Stock"
+        type="number"
+        placeholder="Enter Stock Quantity"
+        value={formData.Stock}
+        onChange={handleChange}
+        min="0"
+        required
+        className="border p-2 w-full rounded"
+      />
+
       <input name="rating" placeholder="Rating (e.g. ★★★★☆)" value={formData.rating} onChange={handleChange} className="border p-2 w-full rounded" />
 
       <label className="flex items-center space-x-2">

@@ -9,6 +9,7 @@ const ProductList = ({ products, refreshProducts }) => {
     description: "",
     imageUrl: "",
     category: "",
+    Stock:"",
     rating: "",
     sale: false,
   });
@@ -148,6 +149,7 @@ const ProductList = ({ products, refreshProducts }) => {
             </div>
             <p className="text-gray-600 text-sm mb-1">{product.description || "No description"}</p>
             <p className="text-gray-500 text-sm mb-1">Category: {product.category}</p>
+             <p className="text-xl font-semibold text-green-600">Stock:{product.Stock}</p>
             <p className="text-yellow-400 font-semibold">{product.rating}</p>
 
             {/* Action Buttons */}

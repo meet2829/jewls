@@ -1,9 +1,27 @@
 import { Link } from "react-router-dom";
-import { addToCart } from '../Component/utils/cartUtils';
-import { Bounce, toast, ToastContainer } from 'react-toastify';
+import { Bounce, toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../Redux/Slices/cartSlice';
 
 const ProductCard = ({ product }) => {
+const dispatch = useDispatch();
 
+const handleAddToCart = () => {
+    // Dispatch the addToCart action with the product
+    dispatch(addToCart(product));
+    
+    toast.success('Product added to cart!', {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+    });
+  };
 
   return (
     <div className="relative border p-4 rounded-md shadow hover:shadow-lg transition flex flex-col justify-between">
@@ -33,20 +51,7 @@ const ProductCard = ({ product }) => {
         <span className="text-lg font-medium text-gray-800">₨ {product.price}</span>
       </p>
       <button
-        onClick={() => {
-          addToCart(product);
-          toast.success(`${product.name} added to cart 🛒`, {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: false,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-            transition: Bounce,
-          });
-        }}
+          onClick={handleAddToCart}
         className="bg-red-700 text-white px-6 py-3 rounded hover:bg-red-800 transition"
       >
         Add to Cart

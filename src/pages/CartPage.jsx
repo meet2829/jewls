@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Bounce, toast } from 'react-toastify';
 import Navbar from '../Component/Navbar';
 import { useNavigate } from 'react-router-dom';
+import { applyCoupon as applyCouponThunk, clearCoupon } from "../Redux/Slices/couponSlice"; // adjust path
+
 
 const CartPage = () => {
 
@@ -9,7 +11,7 @@ const CartPage = () => {
   const [discount, setDiscount] = useState(0);
   const [cart, setCart] = useState([]);
   const navigate = useNavigate()
-
+  
 
   useEffect(() => {
     const savedCart = localStorage.getItem('cart');

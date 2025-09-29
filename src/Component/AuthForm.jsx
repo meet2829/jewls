@@ -1,142 +1,86 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import loginbg from '../assets/Login-bg.jpg'
-import { useNavigate } from 'react-router-dom';
-import { Bounce, toast } from 'react-toastify';
-
-
-
+import React, { useState } from "react";
+import axios from "axios";
+import loginbg from "../assets/Login-bg.jpg";
+import { useNavigate } from "react-router-dom";
+import { Bounce, toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { loginSuccess, registerSuccess } from "../Redux/Slices/authSlice";
 
 const AuthForm = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [isSignUp, setIsSignUp] = useState(false);
   const [step, setStep] = useState(1); // 1 = Form, 2 = OTP
-  const [otp, setOtp] = useState('');
+  const [otp, setOtp] = useState("");
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: ''
+    name: "",
+    email: "",
+    password: "",
   });
 
   const handleToggle = () => {
     setIsSignUp(!isSignUp);
-    setFormData({ name: '', email: '', password: '' });
+    setFormData({ name: "", email: "", password: "" });
+    setStep(1);
   };
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
     const { name, email, password } = formData;
 
-    if (isSignUp && step === 1) {
-      axios.post(`${import.meta.env.VITE_API_URL}/api/auth/send-otp`, { email })
-        .then(res => {
-
-          toast.success('OTP sent to your email', {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: false,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-            transition: Bounce,
-          });
-          setStep(2); // move to OTP input
-        })
-        .catch(err => {
-          console.error(err);
-          toast.error('Error sending OTP', {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: false,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-            transition: Bounce,
-          });
+    try {
+      if (isSignUp && step === 1) {
+        // Step 1: Send OTP
+        await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/send-otp`, { email });
+        toast.success("OTP sent to your email", { transition: Bounce });
+        setStep(2);
+      } else if (isSignUp && step === 2) {
+        // Step 2: Verify OTP and Register
+        await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/verify-otp`, { email, otp });
+        const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/register`, {
+          name,
+          email,
+          password,
         });
-    } else if (isSignUp && step === 2) {
-      axios.post(`${import.meta.env.VITE_API_URL}/api/auth/verify-otp`, { email, otp })
-        .then(res => {
-          // Register after OTP verification
-          return axios.post(`${import.meta.env.VITE_API_URL}/api/auth/register`, { name, email, password });
-        })
 
-        .then(res => {
-
-          toast.success('Registered successfully', {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: false,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-            transition: Bounce,
-          });
-          setIsSignUp(false);
-          setStep(1);
-          setFormData({ name: '', email: '', password: '' });
-        })
-        .catch(err => {
-          console.error(err);
-
-          toast.error('OTP verification or registration failed', {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: false,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-            transition: Bounce,
-          });
+        dispatch(registerSuccess(res.data.user)); // 👈 save in Redux
+        toast.success("Registered successfully", { transition: Bounce });
+        navigate("/");
+      } else {
+        // Regular Login
+        const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
+          email,
+          password,
         });
-    } else {
-      // Regular login
-      axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`, { email, password })
-        .then(res => {
-          
-          toast.success('Logged in successfully', {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: false,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-            transition: Bounce,
-          });
-          localStorage.setItem("user", JSON.stringify(res.data.user)); // 👈 save user
-          navigate('/');
-        })
+
+        dispatch(loginSuccess(res.data.user)); // 👈 save in Redux
+        toast.success("Logged in successfully", { transition: Bounce });
+        navigate("/");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Authentication failed", { transition: Bounce });
     }
   };
 
   return (
-    <div className="min-h-screen bg-contain bg-center flex items-center justify-center relative " style={{ backgroundImage: `url(${loginbg})` }}>
-      {/* Background overlay with blur */}
-
-
+    <div
+      className="min-h-screen bg-contain bg-center flex items-center justify-center relative"
+      style={{ backgroundImage: `url(${loginbg})` }}
+    >
       <div className="absolute inset-0 bg-black/10 backdrop-blur-sm"></div>
 
       {/* Glassy Auth Form */}
       <div className="relative z-10 w-full max-w-sm p-8 bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl shadow-lg text-white">
         <h2 className="text-2xl font-semibold text-center mb-6">
-          {isSignUp ? 'Create an Account' : 'Welcome Back'}
+          {isSignUp ? "Create an Account" : "Welcome Back"}
         </h2>
+
         <form onSubmit={handleSubmit} className="space-y-5">
           {isSignUp && (
             <div>
@@ -152,6 +96,7 @@ const AuthForm = () => {
               />
             </div>
           )}
+
           <div>
             <label className="block text-sm mb-1">Email</label>
             <input
@@ -164,6 +109,7 @@ const AuthForm = () => {
               required
             />
           </div>
+
           <div>
             <label className="block text-sm mb-1">Password</label>
             <input
@@ -176,7 +122,6 @@ const AuthForm = () => {
               required
             />
           </div>
-
 
           {isSignUp && step === 2 && (
             <div>
@@ -193,22 +138,22 @@ const AuthForm = () => {
             </div>
           )}
 
-
           <button
             type="submit"
             className="w-full py-2 px-4 bg-white text-gray-800 font-semibold rounded-lg hover:bg-gray-100 transition"
           >
-            {isSignUp ? 'Create Account' : 'Log In'}
+            {isSignUp ? (step === 2 ? "Verify & Register" : "Send OTP") : "Log In"}
           </button>
         </form>
+
         <p className="text-center text-sm mt-4 text-white/80">
-          {isSignUp ? 'Already have an account?' : "Don't have an account?"}
+          {isSignUp ? "Already have an account?" : "Don't have an account?"}
           <button
             type="button"
             onClick={handleToggle}
             className="ml-1 text-white font-semibold underline hover:text-gray-200"
           >
-            {isSignUp ? 'Sign In' : 'Sign Up'}
+            {isSignUp ? "Sign In" : "Sign Up"}
           </button>
         </p>
       </div>
