@@ -7,6 +7,7 @@ import { Bounce, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Provider } from "react-redux";
 import { store } from './Redux/store';
+import Navbar from './Component/Navbar';
 
 
 
@@ -19,6 +20,7 @@ function App() {
   return (
     <div className="font-[Poppins]">
       <Provider store={store}>
+        <Navbar />
       <Allroutes />
       <ToastContainer
         position="top-right"

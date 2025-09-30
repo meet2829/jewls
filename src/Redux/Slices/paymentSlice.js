@@ -1,18 +1,17 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 
 // Start Payment
 export const initiatePayment = createAsyncThunk(
   "payment/initiatePayment",
   async ({ orderId, token }) => {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/payment/initiate`, {
-      method: "POST",
+     const { data } =await axios.post(`${import.meta.env.VITE_API_URL}/api/payment/initiate`, {orderId},
+      {
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ orderId }),
     });
-    return await res.json();
+    return data
   }
 );
 
@@ -20,15 +19,13 @@ export const initiatePayment = createAsyncThunk(
 export const verifyPayment = createAsyncThunk(
   "payment/verifyPayment",
   async ({ paymentData, token }) => {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/payment/verify`, {
-      method: "POST",
+    const {data} = await axios.post(`${import.meta.env.VITE_API_URL}/api/payment/verify`, paymentData,
+      {
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(paymentData),
     });
-    return await res.json();
+    return data
   }
 );
 

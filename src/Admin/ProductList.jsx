@@ -9,49 +9,46 @@ const ProductList = ({ products, refreshProducts }) => {
     description: "",
     imageUrl: "",
     category: "",
-    Stock:"",
+    Stock: "",
     rating: "",
     sale: false,
   });
 
   // Delete Product
-  const handleDelete = async (id) => {
-    try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/products/products/${id}`, {
-        method: "DELETE",
-      });
-      if (!res.ok) {
-        const error = await res.json();
+ const handleDelete = async (id) => {
+  try {
+    await axios.delete(`${import.meta.env.VITE_API_URL}/api/products/products/${id}`);
 
-        toast.error("Error deleting: " + (error.message || res.status), {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          transition: Bounce,
-        });
-        return;
-      }
-      refreshProducts();
-    } catch (err) {
+    toast.success("Product deleted successfully!", {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+    });
 
-      toast.error('Network error while deleting product', {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
-    }
-  };
+    refreshProducts();
+  } catch (err) {
+    const errorMessage =
+      err.response?.data?.message || err.message || "Error deleting product";
+
+    toast.error(errorMessage, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+    });
+  }
+};
 
   // Open Edit Form
   const handleEditClick = (product) => {
@@ -71,31 +68,24 @@ const ProductList = ({ products, refreshProducts }) => {
   // Save Edited Product
   const handleSave = async () => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/products/products/${editingProduct}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(editForm),
-      });
-      if (!res.ok) {
-        const error = await res.json();
+       await axios.put(`${import.meta.env.VITE_API_URL}/api/products/products/${editingProduct}`, editForm);
+    
 
-        toast.error("Error updating: " + (error.message || res.status), {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          transition: Bounce,
-        });
-        return;
-      }
+        toast.success("Product updated successfully!", {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+    });
       setEditingProduct(null);
       refreshProducts();
     } catch (err) {
-      
+
       toast.error('Network error while updating product', {
         position: "top-right",
         autoClose: 5000,
@@ -149,7 +139,7 @@ const ProductList = ({ products, refreshProducts }) => {
             </div>
             <p className="text-gray-600 text-sm mb-1">{product.description || "No description"}</p>
             <p className="text-gray-500 text-sm mb-1">Category: {product.category}</p>
-             <p className="text-xl font-semibold text-green-600">Stock:{product.Stock}</p>
+            <p className="text-xl font-semibold text-green-600">Stock:{product.Stock}</p>
             <p className="text-yellow-400 font-semibold">{product.rating}</p>
 
             {/* Action Buttons */}
@@ -215,6 +205,24 @@ const ProductList = ({ products, refreshProducts }) => {
                 placeholder="Image URL"
                 className="border p-2 w-full rounded-lg focus:ring-2 focus:ring-pink-400 outline-none"
               />
+              {/* <input
+                name="Stock"
+                value={editForm.Stock}
+                onChange={handleChange}
+                
+                
+              /> */}
+
+              <input
+                name="Stock"
+                type="number"
+                value={editForm.Stock ?? editForm.stock ?? 0}
+                onChange={handleChange}
+                min="0"
+                placeholder="Enter Stock Quantity"
+                className="border p-2 w-full rounded-lg focus:ring-2 focus:ring-pink-400 outline-none"
+              />
+
               <input
                 name="category"
                 value={editForm.category}

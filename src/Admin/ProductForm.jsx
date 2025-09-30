@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import FormInput from "../Component/utils/FormInput";
 
 const ProductForm = ({ refreshProducts }) => {
   const [formData, setFormData] = useState({
@@ -8,6 +9,7 @@ const ProductForm = ({ refreshProducts }) => {
     description: "",
     imageUrl: "",
     category: "",
+    additionalImages: "",
     Stock: "",
     rating: "",
     sale: false,
@@ -29,25 +31,30 @@ const ProductForm = ({ refreshProducts }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await fetch(`${import.meta.env.VITE_API_URL}/api/products/products`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
-    setFormData({
-      name: "",
-      price: "",
-      oldPrice: "",
-      description: "",
-      imageUrl: "",
-      category: "",
-      rating: "",
-      Stock: "",
-      sale: false,
-    });
-    refreshProducts();
-  };
+    try {
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/products/products`, formData, {
+        headers: { "Content-Type": "application/json" },
+      });
 
+      // Reset form after success
+      setFormData({
+        name: "",
+        price: "",
+        oldPrice: "",
+        description: "",
+        imageUrl: "",
+        additionalImages: "",
+        category: "",
+        rating: "",
+        Stock: "",
+        sale: false,
+      });
+
+      refreshProducts();
+    } catch (err) {
+      console.error("Error adding product:", err);
+    }
+  };
   return (
     <form
       onSubmit={handleSubmit}
@@ -55,14 +62,25 @@ const ProductForm = ({ refreshProducts }) => {
     >
       <h2 className="text-xl font-semibold">➕ Add Product</h2>
 
-      <input name="name" placeholder="Product Name" value={formData.name} onChange={handleChange} required className="border p-2 w-full rounded" />
-      <input name="price" type="number" placeholder="Price" value={formData.price} onChange={handleChange} required className="border p-2 w-full rounded" />
-      <input name="oldPrice" type="number" placeholder="Old Price" value={formData.oldPrice} onChange={handleChange} className="border p-2 w-full rounded" />
-      <input name="description" placeholder="Description" value={formData.description} onChange={handleChange} required className="border p-2 w-full rounded" />
-      <input name="imageUrl" placeholder="Image URL" value={formData.imageUrl} onChange={handleChange} className="border p-2 w-full rounded" />
-      <input name="category" placeholder="Category" value={formData.category} onChange={handleChange} required className="border p-2 w-full rounded" />
+      <FormInput name="name" placeholder="Product Name" value={formData.name} onChange={handleChange} required />
+      <FormInput name="price" type="number" placeholder="Price" value={formData.price} onChange={handleChange} required  />
+      <FormInput name="oldPrice" type="number" placeholder="Old Price" value={formData.oldPrice} onChange={handleChange}  />
+      <FormInput name="description" placeholder="Description" value={formData.description} onChange={handleChange} required  />
+      <FormInput
+        name="additionalImages"
+        placeholder="Additional Images (comma separated URLs)"
+        value={formData.additionalImages || ""}
+        onChange={(e) =>
+          setFormData({
+            ...formData,
+            additionalImages: e.target.value.split(","),
+          })
+        }
+        className="border p-2 w-full rounded"
+      />
+      <FormInput name="category" placeholder="Category" value={formData.category} onChange={handleChange} required className="border p-2 w-full rounded" />
 
-      <input
+      <FormInput
         name="Stock"
         type="number"
         placeholder="Enter Stock Quantity"
@@ -73,7 +91,7 @@ const ProductForm = ({ refreshProducts }) => {
         className="border p-2 w-full rounded"
       />
 
-      <input name="rating" placeholder="Rating (e.g. ★★★★☆)" value={formData.rating} onChange={handleChange} className="border p-2 w-full rounded" />
+      <FormInput name="rating" placeholder="Rating (e.g. ★★★★☆)" value={formData.rating} onChange={handleChange} className="border p-2 w-full rounded" />
 
       <label className="flex items-center space-x-2">
         <input type="checkbox" name="sale" checked={formData.sale} onChange={handleChange} />

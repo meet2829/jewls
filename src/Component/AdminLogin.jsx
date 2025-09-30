@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import FormInput from "./utils/FormInput";
 
 const AdminLogin = () => {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -17,7 +18,7 @@ const AdminLogin = () => {
     e.preventDefault();
     if (form.email === ADMIN_EMAIL && form.password === ADMIN_PASSWORD) {
       localStorage.setItem("isAdmin", "true");
-      navigate("/admin"); 
+      navigate("/admin");
     } else {
       setError("Invalid credentials");
     }
@@ -29,22 +30,20 @@ const AdminLogin = () => {
         <h2 className="text-xl font-bold mb-4 text-center">Admin Login</h2>
         {error && <p className="text-red-500 mb-2">{error}</p>}
         <form onSubmit={handleSubmit} className="space-y-3">
-          <input
+          <FormInput
             type="email"
             name="email"
             placeholder="Email"
             value={form.email}
             onChange={handleChange}
-            className="w-full p-2 border rounded"
             required
           />
-          <input
+          <FormInput
             type="password"
             name="password"
             placeholder="Password"
             value={form.password}
             onChange={handleChange}
-            className="w-full p-2 border rounded"
             required
           />
           <button

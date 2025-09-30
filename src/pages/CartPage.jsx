@@ -1,17 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { Bounce, toast } from 'react-toastify';
+import  { useEffect, useState } from 'react';
+import {  toast } from 'react-toastify';
 import Navbar from '../Component/Navbar';
 import { useNavigate } from 'react-router-dom';
-import { applyCoupon as applyCouponThunk, clearCoupon } from "../Redux/Slices/couponSlice"; // adjust path
-
+import axios from 'axios';
 
 const CartPage = () => {
-
   const [couponCode, setCouponCode] = useState("");
   const [discount, setDiscount] = useState(0);
   const [cart, setCart] = useState([]);
-  const navigate = useNavigate()
-  
+  const navigate = useNavigate();
 
   useEffect(() => {
     const savedCart = localStorage.getItem('cart');
@@ -33,7 +30,6 @@ const CartPage = () => {
     localStorage.setItem('cart', JSON.stringify(updatedCart));
   };
 
-
   const handleRemove = (productId) => {
     const updatedCart = cart.filter((item) => item._id !== productId);
     setCart(updatedCart);
@@ -53,204 +49,179 @@ const CartPage = () => {
         return;
       }
 
-      const totalBeforeDiscount = getTotal(); // total without discount
+      const totalBeforeDiscount = getTotal();
       let discountAmount = 0;
 
-      // Step 1: Apply coupon
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/coupon/apply`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+      // Step 1: Apply coupon using Axios
+      const { data } = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/coupon/apply`,
+        {
           code: couponCode,
           userId: user._id,
           amount: totalBeforeDiscount
-        }),
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        // Calculate discount
-        if (data.discountType === "percentage") {
-          discountAmount = totalBeforeDiscount * (data.discountValue / 100);
-        } else {
-          discountAmount = data.discountValue;
         }
+      );
 
-        const totalAfterDiscount = Math.max(totalBeforeDiscount - discountAmount, 0);
-
-        // Update UI
-        setDiscount(discountAmount);
-        toast.success(`Coupon applied! Discount: ₨. ${discountAmount.toFixed(2)}`);
-
-        // Step 2: Track usage
-        // await fetch(`${import.meta.env.VITE_API_URL}/api/coupon/track-usage`, {
-        //   method: "POST",
-        //   headers: { "Content-Type": "application/json" },
-        //   body: JSON.stringify({
-        //     code: couponCode,
-        //     userId: user._id,
-        //     totalBeforeDiscount,
-        //     discountAmount,
-        //     totalAfterDiscount,
-        //   }),
-        // });
-
+      // Calculate discount
+      if (data.discountType === "percentage") {
+        discountAmount = totalBeforeDiscount * (data.discountValue / 100);
       } else {
-        toast.error(data.message);
-        setDiscount(0);
+        discountAmount = data.discountValue;
       }
+
+      const totalAfterDiscount = Math.max(totalBeforeDiscount - discountAmount, 0);
+
+      // Update UI
+      setDiscount(discountAmount);
+      toast.success(`Coupon applied! Discount: ₨. ${discountAmount.toFixed(2)}`);
+
+      // Step 2: Track usage (commented out as in original)
+      // await axios.post(`${import.meta.env.VITE_API_URL}/api/coupon/track-usage`, {
+      //   code: couponCode,
+      //   userId: user._id,
+      //   totalBeforeDiscount,
+      //   discountAmount,
+      //   totalAfterDiscount,
+      // });
 
     } catch (err) {
       console.error(err);
-      toast.error("Something went wrong while applying coupon");
+      if (err.response?.data?.message) {
+        toast.error(err.response.data.message);
+      } else {
+        toast.error("Something went wrong while applying coupon");
+      }
       setDiscount(0);
     }
   };
 
+  const handleCheckout = async () => {
+    try {
+      const user = JSON.parse(localStorage.getItem("user"));
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-const handleCheckout = async () => {
-  try {
-    const user = JSON.parse(localStorage.getItem("user"));
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-    if (!user?._id) {
-      toast.warn("Please login to place order");
-      navigate("/login");
-      return;
-    }
-
-    const totalAfterDiscount = getTotalAfterDiscount();
-    
-    // Step 1: Create order first (before payment)
-    const createOrderRes = await fetch(`${import.meta.env.VITE_API_URL}/api/orders`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        user: user._id,
-        userName: user.name,
-        items: cart.map((item) => ({
-          product: item._id,
-          quantity: item.quantity,
-          imageUrl: item.imageUrl,
-          name: item.name,
-          price: item.price
-        })),
-        total: totalAfterDiscount, // Store the actual amount in rupees
-        couponCode: couponCode,
-        discountAmount: discount
-      }),
-    });
-
-    const orderData = await createOrderRes.json();
-
-    if (!createOrderRes.ok) {
-      throw new Error(orderData.message || 'Failed to create order');
-    }
-
-    const createdOrder = orderData.order;
-
-    // Step 2: Create Razorpay order - Convert to paise for Razorpay
-   
-    
-    const paymentResponse = await fetch(
-      `${import.meta.env.VITE_API_URL}/api/payment/create-order`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          orderId: createdOrder._id,
-          amount: totalAfterDiscount, // Send amount in paise
-          currency: "INR"
-        }),
+      if (!user?._id) {
+        toast.warn("Please login to place order");
+        navigate("/login");
+        return;
       }
-    );
 
-    const paymentOrder = await paymentResponse.json();
+      const totalAfterDiscount = getTotalAfterDiscount();
+      
+      // Step 1: Create order first (before payment) using Axios
+      const { data: orderData } = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/orders`,
+        {
+          user: user._id,
+          userName: user.name,
+          items: cart.map((item) => ({
+            product: item._id,
+            quantity: item.quantity,
+            imageUrl: item.imageUrl,
+            name: item.name,
+            price: item.price
+          })),
+          total: totalAfterDiscount,
+          couponCode: couponCode,
+          discountAmount: discount
+        }
+      );
 
-    if (!paymentResponse.ok) {
-      // Delete the created order if payment order creation fails
-      await fetch(`${import.meta.env.VITE_API_URL}/api/orders/${createdOrder._id}`, {
-        method: "DELETE"
-      });
-      throw new Error(paymentOrder.message || 'Failed to create payment order');
-    }
+      const createdOrder = orderData.order;
 
-    // Razorpay options
-    const options = {
-      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-      amount: paymentOrder.amount,
-      currency: "INR",
-      name: "My Jewellery Store",
-      description: `Order #${createdOrder._id}`,
-      order_id: paymentOrder.id,
-      handler: async function (paymentResponse) {
-        try {
-          // Step 3: Update order payment status to paid
-          const updatePaymentRes = await fetch(
-            `${import.meta.env.VITE_API_URL}/api/orders/${createdOrder._id}/payment`,
-            {
-              method: "PUT",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
+      // Step 2: Create Razorpay order using Axios
+      const { data: paymentOrder } = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/payment/create-order`,
+        {
+          orderId: createdOrder._id,
+          amount: totalAfterDiscount,
+          currency: "INR"
+        }
+      );
+
+      // Razorpay options
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+        amount: paymentOrder.amount,
+        currency: "INR",
+        name: "My Jewellery Store",
+        description: `Order #${createdOrder._id}`,
+        order_id: paymentOrder.id,
+        handler: async function (paymentResponse) {
+          try {
+            // Step 3: Update order payment status to paid using Axios
+            await axios.put(
+              `${import.meta.env.VITE_API_URL}/api/orders/${createdOrder._id}/payment`,
+              {
                 paymentId: paymentResponse.razorpay_payment_id,
                 paymentStatus: 'paid'
-              }),
+              }
+            );
+
+            // Step 4: Track coupon usage with the actual orderId using Axios
+            if (couponCode && discount > 0) {
+              await axios.post(
+                `${import.meta.env.VITE_API_URL}/api/coupon/track-usage`,
+                {
+                  code: couponCode,
+                  userId: user._id,
+                  orderId: createdOrder._id,
+                  totalBeforeDiscount: getTotal(),
+                  discountAmount: discount,
+                  totalAfterDiscount: totalAfterDiscount,
+                }
+              );
             }
-          );
 
-          const updatedOrder = await updatePaymentRes.json();
+            toast.success("Payment successful & Order placed!");
+            localStorage.removeItem("cart");
+            setCart([]);
+            setDiscount(0);
+            setCouponCode("");
 
-          // Step 4: Track coupon usage with the actual orderId
-          if (couponCode && discount > 0) {
-            await fetch(`${import.meta.env.VITE_API_URL}/api/coupon/track-usage`, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                code: couponCode,
-                userId: user._id,
-                orderId: createdOrder._id,
-                totalBeforeDiscount: getTotal(),
-                discountAmount: discount,
-                totalAfterDiscount: totalAfterDiscount,
-              }),
-            });
+          } catch (err) {
+            console.error("Error updating order:", err);
+            if (err.response?.data?.message) {
+              toast.error(err.response.data.message);
+            } else {
+              toast.error("Something went wrong after payment");
+            }
           }
+        },
+        prefill: {
+          name: user.name,
+          email: user.email,
+        },
+        theme: { color: "#D32F2F" },
+      };
 
-          toast.success("Payment successful & Order placed!");
-          localStorage.removeItem("cart");
-          setCart([]);
-          setDiscount(0);
-          setCouponCode("");
+      // Step 5: Open Razorpay checkout popup
+      const razorpay = new window.Razorpay(options);
+      razorpay.open();
 
-        } catch (err) {
-          console.error("Error updating order:", err);
-          toast.error("Something went wrong after payment");
+    } catch (err) {
+      console.error("Checkout error:", err);
+      
+      // Delete the created order if payment order creation fails
+      if (err.config?.url?.includes('/api/payment/create-order')) {
+        try {
+          const orderId = JSON.parse(err.config.data).orderId;
+          await axios.delete(`${import.meta.env.VITE_API_URL}/api/orders/${orderId}`);
+        } catch (deleteErr) {
+          console.error("Error deleting order:", deleteErr);
         }
-      },
-      prefill: {
-        name: user.name,
-        email: user.email,
-      },
-      theme: { color: "#D32F2F" },
-    };
+      }
 
-    // Step 5: Open Razorpay checkout popup
-    const razorpay = new window.Razorpay(options);
-    razorpay.open();
-
-  } catch (err) {
-    console.error("Checkout error:", err);
-    toast.error(err.message || "Something went wrong with payment");
-  }
-};
-
+      if (err.response?.data?.message) {
+        toast.error(err.response.data.message);
+      } else {
+        toast.error("Something went wrong with payment");
+      }
+    }
+  };
 
   return (
     <div>
-
-      <Navbar />
-
       <div className="px-4 md:px-20 py-12 bg-gray-50 min-h-screen">
         <h2 className="text-3xl font-semibold mb-6">Your Cart</h2>
 
@@ -337,7 +308,8 @@ const handleCheckout = async () => {
           </div>
         )}
       </div>
-    </div>);
+    </div>
+  );
 };
 
 export default CartPage;

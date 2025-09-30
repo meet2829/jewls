@@ -15,7 +15,7 @@ const Blog = () => {
     <div className="font-sans bg-[#fcedeb]  text-[#111]">
       {/* Header */}
 
-      <Navbar />
+      {/* <Navbar /> */}
       {/* Hero */}
       <div
         className="w-full h-[60vh] px-4 md:px-20 text-center mt-2.5 bg-no-repeat bg-cover bg-center flex items-center justify-center"

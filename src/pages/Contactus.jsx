@@ -2,22 +2,19 @@
 import ContactForm from '../Component/ContactForm';
 import Footer from '../Component/Footer';
 import contactbg from "../assets/image.png"
-import Navbar from '../Component/Navbar';
 
 const Contactus = () => {
   return (
     <div className="font-sans bg-[#f7f7f7] text-[#111]">
-      {/* Header */}
-      <Navbar />
 
 
       {/* Hero */}
-    <div
-  className="w-full py-38 px-4 md:px-20 text-center mt-2.5 bg-no-repeat bg-cover bg-center"
-  style={{ backgroundImage: `url(${contactbg})` }}
->
-  <h1 className="text-4xl font-bold text-gray-700">About Us</h1>
-</div>
+      <div
+        className="w-full py-38 px-4 md:px-20 text-center mt-2.5 bg-no-repeat bg-cover bg-center"
+        style={{ backgroundImage: `url(${contactbg})` }}
+      >
+        <h1 className="text-4xl font-bold text-gray-700">About Us</h1>
+      </div>
 
 
       {/* Contact Info */}
@@ -53,10 +50,10 @@ const Contactus = () => {
 
       {/* Contact Form */}
       <section className="bg-[#fcedeb] py-16 px-7 md:px-20">
-  <div className="flex justify-center">
-    <ContactForm />
-  </div>
-</section>
+        <div className="flex justify-center">
+          <ContactForm />
+        </div>
+      </section>
 
       {/* Footer */}
       <Footer />

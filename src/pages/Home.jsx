@@ -1,4 +1,3 @@
-import React from 'react'
 import bgImage from '../assets/main-bg.png';
 import goldImage from '../assets/goldjewls.jpg';
 import { FaMapMarkerAlt, FaHeart, FaComments, FaDotCircle } from "react-icons/fa";
@@ -10,7 +9,7 @@ import promoVideo from '../assets/main-video.mp4'
 import ContactForm from '../Component/ContactForm';
 import Footer from '../Component/Footer';
 import ProductGrid from '../Component/ProductGrid'
-import Navbar from '../Component/Navbar';
+
 
 
 
@@ -27,8 +26,6 @@ const Home = () => {
                         WebkitClipPath: "polygon(50% 0%, 100% 0, 100% 43%, 100% 83%, 67% 93%, 34% 85%, 4% 96%, 0% 43%, 0 0)",
                     }}
                 ></div>
-                {/* Navbar */}
-                <Navbar />
                 {/* Hero Content */}
                 <div className="relative h-screen w-full">
                     {/* Background */}
@@ -45,7 +42,7 @@ const Home = () => {
                     {/* Text Content */}
                     <div className="absolute inset-0 z-10 flex items-center justify-start text-left px-8 md:px-24" data-aos="fade-up">
                         <div className="max-w-4xl">
-                            <p className="uppercase tracking-widest text-sm">Fall Winter Collection 2025/26</p>
+                            <p className="uppercase tracking-widest text-sm">Fall Winter Collection 2025/26--------------------------------------</p>
                             <h1 className="text-5xl md:text-6xl font-bold font-serif my-4">
                                 The <span className="text-red-600 italic text-6xl md:text-7xl">New</span> Trend
                             </h1>

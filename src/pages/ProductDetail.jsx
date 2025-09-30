@@ -1,70 +1,125 @@
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import axios from 'axios';
-import { addToCart } from '../Component/utils/cartUtils';
-import { Link } from "react-router-dom";
-import { Bounce, toast } from 'react-toastify';
-import Navbar from '../Component/Navbar';
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import { addToCart } from "../Redux/Slices/cartSlice";
+
+import { Bounce, toast } from "react-toastify";
 
 const ProductDetail = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
+  const [selectedImage, setSelectedImage] = useState("");
 
   useEffect(() => {
-    axios.get(`${import.meta.env.VITE_API_URL}/api/products/products/${id}`)
-      .then(res => setProduct(res.data))
-      .catch(err => console.error('Error fetching product', err));
+    axios
+      .get(`${import.meta.env.VITE_API_URL}/api/products/products/${id}`)
+      .then((res) => {
+        setProduct(res.data);
+
+        // ✅ pick first image (if exists), otherwise fallback to imageUrl
+        if (res.data.images && res.data.images.length > 0) {
+          setSelectedImage(res.data.images[0]);
+        } else {
+          setSelectedImage(res.data.imageUrl);
+        }
+      })
+      .catch((err) => console.error("Error fetching product", err));
   }, [id]);
 
   if (!product) return <div className="p-10">Loading...</div>;
 
+  // ✅ Collect all images into one array
+  const allImages = [
+    product.imageUrl,
+    ...(product.images || []),
+    ...(product.additionalImages || []),
+  ].filter(Boolean);
+
   return (
-
-    <div>
-     <Navbar />
-      
-
-
-      <div className="p-10 max-w-4xl mx-auto flex flex-col md:flex-row gap-10 items-start">
+    <div className="p-10 max-w-6xl mx-auto flex flex-col md:flex-row gap-10 items-start">
+      {/* Image Gallery */}
+      <div className="flex-1">
         <img
-          src={product.imageUrl}
+          src={selectedImage}
           alt={product.name}
-          className="w-full md:w-1/2 h-96 object-contain border rounded"
+          className="w-full h-96 object-contain border rounded"
         />
-        <div className="flex-1">
-          <h2 className="text-3xl font-bold mb-2">{product.name}</h2>
-          <p className="text-sm uppercase text-gray-500 tracking-wider">{product.category}</p>
-          <div className="text-red-600 my-2">{product.rating || '★★★★☆'}</div>
-          <p className="text-lg font-medium text-gray-800 mb-4">
-            {product.oldPrice && (
-              <span className="line-through text-gray-400 mr-2">₨ {product.oldPrice}</span>
-            )}
-            ₨ {product.price}
-          </p>
-          <p className="text-sm text-gray-700 mb-6">{product.description}</p>
-          <button
-            onClick={() => {
-              addToCart(product);
-              
-              toast.success('Added to cart!', {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-                transition: Bounce,
-              });
-            }}
-            className="bg-red-700 text-white px-6 py-3 rounded hover:bg-red-800 transition"
-          >
-            Add to Cart
-          </button>
+
+        {/* Thumbnails */}
+        <div className="flex gap-3 mt-4 overflow-x-auto">
+          {allImages.map((img, idx) => (
+            <img
+              key={idx}
+              src={img}
+              alt={`thumbnail-${idx}`}
+              className={`w-20 h-20 object-cover border rounded cursor-pointer hover:scale-105 transition ${
+                selectedImage === img ? "border-red-600" : "border-gray-300"
+              }`}
+              onClick={() => setSelectedImage(img)}
+            />
+          ))}
         </div>
       </div>
-    </div>);
+
+      {/* Product Info */}
+      <div className="flex-1">
+        <h2 className="text-3xl font-bold mb-2">{product.name}</h2>
+        <p className="text-sm uppercase text-gray-500 tracking-wider">
+          {product.category}
+        </p>
+
+        <div className="flex items-center gap-3 mb-4">
+          <p className="text-2xl font-semibold text-gray-800">₨ {product.price}</p>
+          {product.oldPrice && (
+            <p className="line-through text-gray-400 text-lg">
+              ₨ {product.oldPrice}
+            </p>
+          )}
+        </div>
+
+        {/* Stock */}
+        <p
+          className={`font-medium mb-4 ${
+            product.Stock > 0 ? "text-green-600" : "text-red-600"
+          }`}
+        >
+          {product.Stock > 0
+            ? `In Stock (${product.Stock} available)`
+            : "Out of Stock"}
+        </p>
+
+        {/* Short Description */}
+        <p className="text-gray-700 leading-relaxed mb-6">
+          {product.shortDescription}
+        </p>
+
+        {/* Add to Cart */}
+        <button
+          onClick={() => {
+            addToCart(product);
+            toast.success("Added to cart!", {
+              position: "top-right",
+              autoClose: 3000,
+              theme: "light",
+              transition: Bounce,
+            });
+          }}
+          className="bg-red-700 text-white px-6 py-3 rounded-lg hover:bg-red-800 transition"
+          disabled={product.Stock <= 0}
+        >
+          {product.Stock > 0 ? "Add to Cart" : "Out of Stock"}
+        </button>
+
+        {/* Overview Section */}
+        <div className="mt-8 border-t pt-6">
+          <h3 className="text-xl font-semibold mb-2">Overview</h3>
+          <p className="text-gray-700 whitespace-pre-line leading-relaxed">
+            {product.overview}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default ProductDetail;

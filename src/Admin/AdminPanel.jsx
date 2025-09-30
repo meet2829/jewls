@@ -8,6 +8,7 @@ import MonthlyProfitChart from "./Charts/MonthlyProfitChart";
 import { useNavigate } from "react-router-dom";
 // import MonthlyUserChart from "./Charts/MonthlyUserChart";
 // import CatagoryPieChart from "./Charts/CatagoryPieChart";
+import axios from "axios";
 
 
 
@@ -28,79 +29,61 @@ const AdminPanel = () => {
   };
 
   const updateOrderStatus = async (orderId, newStatus) => {
-    try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/orders/${orderId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ status: newStatus }),
-      });
+  try {
+    await axios.put(`${import.meta.env.VITE_API_URL}/api/orders/${orderId}`, { status: newStatus });
+    fetchOrders();
+  } catch (err) {
+    console.error("Error updating order status:", err);
+  }
+};
 
-      if (res.ok) {
-        fetchOrders();
-      } else {
-        console.error("Failed to update order status");
-      }
-    } catch (err) {
-      console.error("Error updating order status:", err);
-    }
-  };
-
-  const fetchProducts = async () => {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/products/products`, {
-      method: "GET",
-      cache: "no-cache" // 🔑 force fresh fetch
+ const fetchProducts = async () => {
+  try {
+    const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/products/products`, {
+      headers: { "Cache-Control": "no-cache" }
     });
-    const data = await res.json();
     setProducts(data);
-  };
+  } catch (err) {
+    console.error("Error fetching products:", err);
+  }
+};
 
   const fetchOrders = async () => {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/orders`);
-    const data = await res.json();
+  try {
+    const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/orders`);
     setOrders(data);
-  };
-
-  const fetchUsers = async () => {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/users`);
-    const data = await res.json();
-    console.log("user fetched:", data);
-    setUsers(data);
-  };
-
-  const fetchOrderDetails = async (orderId) => {
-    try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/orders/${orderId}`);
-      const data = await res.json();
-      setSelectedOrder(data);
-    } catch (err) {
-      console.error("Error fetching order details:", err);
-    }
-  };
-
-  const fetchContectDetails = async () => {
-    try {
-
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/massage`)
-      const data = await res.json()
-      setmassage(data)
-    } catch (err) {
-      console.error("Error fetching order details:", err);
-    }
+  } catch (err) {
+    console.error("Error fetching orders:", err);
   }
+};
 
-  const fetchCoupons = async () => {
-    try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/coupon/usage`);
-      const data = await res.json();
-      console.log("data:", data);
-      setCoupons(data);
+const fetchUsers = async () => {
+  try {
+    const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/users`);
+    setUsers(data);
+  } catch (err) {
+    console.error("Error fetching users:", err);
+  }
+};
 
-    } catch (err) {
-      console.error("Error fetching coupons:", err);
-    }
-  };
+const fetchContectDetails = async () => {
+  try {
+    const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/massage`);
+    setmassage(data);
+  } catch (err) {
+    console.error("Error fetching messages:", err);
+  }
+};
+
+const fetchCoupons = async () => {
+  try {
+    const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/coupon/usage`);
+    setCoupons(data);
+  } catch (err) {
+    console.error("Error fetching coupons:", err);
+  }
+};
+
 
   useEffect(() => {
     fetchProducts();
@@ -357,7 +340,6 @@ const AdminPanel = () => {
                 <tr className="bg-gray-200">
                   <th className="border p-2">Coupon Code</th>
                   <th className="border p-2">Order ID</th>
-                  <th className="border p-2">Discount Value</th>
                   <th className="border p-2">Total Before Discount</th>
                   <th className="border p-2">Discount Amount</th>
                   <th className="border p-2">Total After Discount</th>
@@ -371,7 +353,6 @@ const AdminPanel = () => {
                     <tr key={c._id}>
                       <td>{c.code}</td>
                        <td>{c.orderId?._id|| "N/A"}</td>
-                      <td>{c.discountValue || c.discountAmount}</td>
                       <td>{c.totalBeforeDiscount}</td>
                       <td>{c.discountAmount}</td>
                       <td>{c.totalAfterDiscount}</td>

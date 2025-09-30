@@ -4,26 +4,33 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 export const applyCoupon = createAsyncThunk(
   "coupons/applyCoupon",
   async ({ code, token }) => {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/coupons/apply`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ code }),
-    });
-    return await res.json();
+    const { data } = await axios.post(
+      `${import.meta.env.VITE_API_URL}/api/coupons/apply`,
+      { code },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return data;
   }
 );
+
 
 // Fetch All Coupons (Admin)
 export const fetchCoupons = createAsyncThunk(
   "coupons/fetchCoupons",
   async (token) => {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/coupons`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    return await res.json();
+    const { data } = await axios.get(
+      `${import.meta.env.VITE_API_URL}/api/coupons`,
+      {
+        headers: { 
+          Authorization: `Bearer ${token}` 
+        },
+      }
+    );
+    return data;
   }
 );
 

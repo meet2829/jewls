@@ -11,7 +11,7 @@ import Navbar from '../Component/Navbar';
 const Aboutus = () => {
   return (
     <div>
-     <Navbar />
+     {/* <Navbar /> */}
 
       <div className="font-sans bg-[#fff8f5] text-[#111]">
 

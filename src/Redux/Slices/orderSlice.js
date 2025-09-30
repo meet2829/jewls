@@ -4,26 +4,31 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 export const createOrder = createAsyncThunk(
   "orders/createOrder",
   async ({ orderData, token }) => {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/orders`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(orderData),
-    });
-    return await res.json();
+    const { data } = await axios.post(
+      `${import.meta.env.VITE_API_URL}/api/orders`,
+      orderData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return data;
   }
 );
-
 // Fetch User Orders
 export const fetchUserOrders = createAsyncThunk(
   "orders/fetchUserOrders",
   async (token) => {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/orders/my-orders`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    return await res.json();
+    const { data } = await axios.get(
+      `${import.meta.env.VITE_API_URL}/api/orders/my-orders`,
+      {
+        headers: { 
+          Authorization: `Bearer ${token}` 
+        },
+      }
+    );
+    return data;
   }
 );
 
@@ -31,10 +36,15 @@ export const fetchUserOrders = createAsyncThunk(
 export const fetchAllOrders = createAsyncThunk(
   "orders/fetchAllOrders",
   async (token) => {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/orders`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    return await res.json();
+    const { data } = await axios.get(
+      `${import.meta.env.VITE_API_URL}/api/orders`,
+      {
+        headers: { 
+          Authorization: `Bearer ${token}` 
+        },
+      }
+    );
+    return data;
   }
 );
 
