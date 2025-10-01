@@ -8,10 +8,14 @@ import "react-toastify/dist/ReactToastify.css";
 import { Provider } from "react-redux";
 import { store } from './Redux/store';
 import Navbar from './Component/Navbar';
+import { useLocation } from 'react-router-dom';
 
 
 
 function App() {
+  const location=useLocation()
+   const hideNavbar = location.pathname.startsWith("/admin");
+
 
   useEffect(() => {
     AOS.init({ duration: 3000 });
@@ -20,7 +24,7 @@ function App() {
   return (
     <div className="font-[Poppins]">
       <Provider store={store}>
-        <Navbar />
+        {!hideNavbar && <Navbar />}
       <Allroutes />
       <ToastContainer
         position="top-right"
@@ -32,7 +36,7 @@ function App() {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="light"
+        theme="dark"
         transition={Bounce}
       />
       </Provider>
