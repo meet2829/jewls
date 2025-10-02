@@ -15,6 +15,7 @@ import AdminPanel from './Admin/AdminPanel';
 import OrdersPage from './Component/OrdersPage';
 import ProtectedRoute from './Component/utils/ProtectedRoute';
 import AdminLogin from './Component/AdminLogin';
+import ForgetPassword from "./pages/ForgetPassword";
 
 
 const Allroutes = () => {
@@ -32,6 +33,7 @@ const Allroutes = () => {
         <Route path='/login' element={<AuthForm />}></Route>
         <Route path='/product/:id' element={<ProductDetail />}></Route>
         <Route path='/admin-login' element={<AdminLogin />}></Route>
+        <Route path="/forgot-password" element={<ForgetPassword/>} />
         <Route
           path="/admin"
           element={

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import loginbg from "../assets/Login-bg.jpg";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Bounce, toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { loginSuccess, registerSuccess } from "../Redux/Slices/authSlice";
@@ -155,6 +155,7 @@ const AuthForm = () => {
           >
             {isSignUp ? "Sign In" : "Sign Up"}
           </button>
+          <p><Link to={"/forgot-password"}>Forgotten your Password?</Link></p>
         </p>
       </div>
     </div>

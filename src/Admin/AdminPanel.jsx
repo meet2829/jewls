@@ -2,13 +2,14 @@ import React, { useState, useEffect, } from "react";
 import ProductForm from "./ProductForm";
 import ProductList from "./ProductList";
 import UsersList from "./UserList";
-import { User, LayoutDashboard, ShoppingBasket, SquarePlus, ShoppingBag, UserStar, MessagesSquare } from "lucide-react";
+import { User, LayoutDashboard, ShoppingBasket, SquarePlus, ShoppingBag, UserStar, MessagesSquare, X, CircleX } from "lucide-react";
 import MonthlyOrderChart from "./Charts/MonthlyOrderChart";
 import MonthlyProfitChart from "./Charts/MonthlyProfitChart";
 import { useNavigate } from "react-router-dom";
 // import MonthlyUserChart from "./Charts/MonthlyUserChart";
 // import CatagoryPieChart from "./Charts/CatagoryPieChart";
 import axios from "axios";
+
 
 
 
@@ -29,60 +30,70 @@ const AdminPanel = () => {
   };
 
   const updateOrderStatus = async (orderId, newStatus) => {
-  try {
-    await axios.put(`${import.meta.env.VITE_API_URL}/api/orders/${orderId}`, { status: newStatus });
-    fetchOrders();
-  } catch (err) {
-    console.error("Error updating order status:", err);
-  }
-};
+    try {
+      await axios.put(`${import.meta.env.VITE_API_URL}/api/orders/${orderId}`, { status: newStatus });
+      fetchOrders();
+    } catch (err) {
+      console.error("Error updating order status:", err);
+    }
+  };
 
- const fetchProducts = async () => {
-  try {
-    const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/products/products`, {
-      headers: { "Cache-Control": "no-cache" }
-    });
-    setProducts(data);
-  } catch (err) {
-    console.error("Error fetching products:", err);
-  }
-};
+  const fetchProducts = async () => {
+    try {
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/products/products`, {
+        headers: { "Cache-Control": "no-cache" }
+      });
+      setProducts(data);
+    } catch (err) {
+      console.error("Error fetching products:", err);
+    }
+  };
 
   const fetchOrders = async () => {
-  try {
-    const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/orders`);
-    setOrders(data);
-  } catch (err) {
-    console.error("Error fetching orders:", err);
-  }
-};
+    try {
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/orders`);
+      setOrders(data);
+    } catch (err) {
+      console.error("Error fetching orders:", err);
+    }
+  };
 
-const fetchUsers = async () => {
-  try {
-    const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/users`);
-    setUsers(data);
-  } catch (err) {
-    console.error("Error fetching users:", err);
-  }
-};
+  const fetchUsers = async () => {
+    try {
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/users`);
+      setUsers(data);
+    } catch (err) {
+      console.error("Error fetching users:", err);
+    }
+  };
 
-const fetchContectDetails = async () => {
-  try {
-    const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/massage`);
-    setmassage(data);
-  } catch (err) {
-    console.error("Error fetching messages:", err);
-  }
-};
+  const fetchContectDetails = async () => {
+    try {
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/massage`);
+      setmassage(data);
+    } catch (err) {
+      console.error("Error fetching messages:", err);
+    }
+  };
 
-const fetchCoupons = async () => {
-  try {
-    const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/coupon/usage`);
-    setCoupons(data);
-  } catch (err) {
-    console.error("Error fetching coupons:", err);
-  }
-};
+  const fetchCoupons = async () => {
+    try {
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/coupon/usage`);
+      setCoupons(data);
+    } catch (err) {
+      console.error("Error fetching coupons:", err);
+    }
+  };
+
+  const fetchOrderDetails = async (orderId) => {
+    try {
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/orders/${orderId}`);
+      setSelectedOrder(data);
+    }
+    catch (err) {
+      console.error("Error fetching order details:", err);
+    }
+  };
 
 
   useEffect(() => {
@@ -169,7 +180,6 @@ const fetchCoupons = async () => {
         </nav>
       </div>
 
-
       {/* Main Content */}
       <div className="flex-1 p-8 bg-black">
         {/* Top Navbar */}
@@ -199,7 +209,7 @@ const fetchCoupons = async () => {
             </div>
             <div className="bg-gray-400 p-4 rounded shadow">
               <h3 className="font-bold">Total Profit</h3>
-              <p className="text-2xl">₹{totalProfit}</p>
+              <p className="text-2xl">₹{totalProfit.toFixed(2)}</p>
             </div>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 m-10">
@@ -212,8 +222,6 @@ const fetchCoupons = async () => {
               <h3 className="text-xl font-semibold text-green-600 mb-4 border-b pb-2">Monthly Orders</h3>
               <MonthlyOrderChart orders={orders} width="100%" height={300} />
             </div>
-
-
             {/* <div className="bg-gradient-to-b from-gray-50 rounded-xl shadow-lg p-6">
               <h3 className="text-xl font-semibold text-purple-600 mb-4 border-b pb-2">Product Categories</h3>
               <CatagoryPieChart products={products} />
@@ -283,28 +291,65 @@ const fetchCoupons = async () => {
             </table>
 
 
-            {selectedOrder  && (
-              <div className="mt-6 p-4 border rounded bg-gray-50">
-                <h4 className="text-lg font-bold mb-2">Order Details</h4>
-                <p><strong>User:</strong> {selectedOrder.user?.name || selectedOrder.userName} ({selectedOrder.user?.email})</p>
-                
-                <p><strong>Total:</strong> ₹{selectedOrder.total}</p>
-                <p><strong>Status:</strong> {selectedOrder.status}</p>
+            {selectedOrder && (
+              <div className="fixed inset-0 backdrop-blur-xs flex items-center justify-center z-50">
+                <div className="relative mt-6 p-4 border rounded bg-gray-50 shadow-2xl animate-fadeIn w-[90%] max-w-lg">
 
-                <h5 className="mt-4 font-semibold">Items:</h5>
-                <ul className="list-disc ml-6">
-                  {selectedOrder.items?.map((item, idx) => (
-                    <li key={idx}>
-                      {item.product?.name || "Product"} × {item.quantity} = ₹
-                      {(item.product?.price * item.quantity).toFixed(2)}
-                    </li>
-                  ))}
-                </ul>
+                  {/* Close Button */}
+                  <button
+                    onClick={() => setSelectedOrder(null)}
+                    className="absolute top-2 right-2 text-gray-600 hover:text-red-600"
+                  >
+                    <CircleX color="red" />
+                  </button>
+
+                  <h4 className="text-lg font-bold mb-2">Order Details</h4>
+                  <p>
+                    <strong>User:</strong> {selectedOrder.user?.name || selectedOrder.userName} ({selectedOrder.user?.email})
+                  </p>
+                  <h5 className="mt-4 font-semibold text-blue-600">Coupon Details:</h5>
+                  {coupons
+                    .filter((c) => {
+                      const couponOrderId = c.orderId?._id || c.orderId;
+                      return String(couponOrderId) === String(selectedOrder._id);
+                    })
+                    .map((c) => (
+                      <div key={c._id} className="bg-gray-100 p-3 rounded mt-2 text-sm">
+                        <p>
+                          <strong>Code:</strong> {c.code}
+                        </p>
+                        <p>
+                          <strong>Discount:</strong> ₹{c.discountAmount || c.discountValue}
+                        </p>
+                        <p>
+                          <strong>Total Before Discount:</strong> ₹{c.totalBeforeDiscount}
+                        </p>
+                        <p>
+                          <strong>Total After Discount:</strong> ₹{c.totalAfterDiscount}
+                        </p>
+                      </div>
+                    ))}
+
+                  {coupons.filter(c => String(c.orderId?._id || c.orderId) === String(selectedOrder._id)).length === 0 && (
+                    <p className="text-gray-500 text-sm mt-2">No coupon applied for this order.</p>
+                  )}
+                  <p><strong>Total:</strong> ₹{selectedOrder.total}</p>
+                  <p><strong>Status:</strong> {selectedOrder.status}</p>
+
+                  <h5 className="mt-4 font-semibold">Items:</h5>
+                  <ul className="list-disc ml-6">
+                    {selectedOrder.items?.map((item, idx) => (
+                      <li key={idx}>
+                        {item.product?.name || "Product"} × {item.quantity} = ₹
+                        {(item.product?.price * item.quantity).toFixed(2)}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             )}
           </div>
         )}
-
 
         {activeTab === "Contect" && (
           <div className="bg-white p-4 rounded shadow">
@@ -352,7 +397,7 @@ const fetchCoupons = async () => {
                   coupons.map((c) => (
                     <tr key={c._id}>
                       <td>{c.code}</td>
-                       <td>{c.orderId?._id|| "N/A"}</td>
+                      <td>{c.orderId?._id || "N/A"}</td>
                       <td>{c.totalBeforeDiscount}</td>
                       <td>{c.discountAmount}</td>
                       <td>{c.totalAfterDiscount}</td>

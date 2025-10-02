@@ -19,7 +19,7 @@ const MonthlyOrderChart = ({ orders }) => {
 
   return (
     <div style={{ width: "100%", height: 400 }}>
-      <BarChart width={700} height={400} data={data}>
+      <BarChart width={600} height={400} data={data}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis stroke="#ffffff" dataKey="month" />
         <YAxis  stroke="#oooooo" allowDecimals={false} />

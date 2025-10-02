@@ -1,6 +1,5 @@
 import  { useEffect, useState } from 'react';
 import {  toast } from 'react-toastify';
-import Navbar from '../Component/Navbar';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -18,7 +17,7 @@ const CartPage = () => {
   const getTotal = () =>
     cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-  const getTotalAfterDiscount = () => getTotal() - discount;
+  const  getTotalAfterDiscount = () => getTotal() - discount;
 
   const handleQuantityChange = (productId, amount) => {
     const updatedCart = cart.map((item) =>
@@ -41,7 +40,6 @@ const CartPage = () => {
       toast.warn("Please enter a coupon code");
       return;
     }
-
     try {
       const user = JSON.parse(localStorage.getItem("user"));
       if (!user?._id) {
@@ -74,15 +72,6 @@ const CartPage = () => {
       // Update UI
       setDiscount(discountAmount);
       toast.success(`Coupon applied! Discount: ₨. ${discountAmount.toFixed(2)}`);
-
-      // Step 2: Track usage (commented out as in original)
-      // await axios.post(`${import.meta.env.VITE_API_URL}/api/coupon/track-usage`, {
-      //   code: couponCode,
-      //   userId: user._id,
-      //   totalBeforeDiscount,
-      //   discountAmount,
-      //   totalAfterDiscount,
-      // });
 
     } catch (err) {
       console.error(err);
@@ -144,7 +133,7 @@ const CartPage = () => {
         key: import.meta.env.VITE_RAZORPAY_KEY_ID,
         amount: paymentOrder.amount,
         currency: "INR",
-        name: "My Jewellery Store",
+        name: "Jewls",
         description: `Order #${createdOrder._id}`,
         order_id: paymentOrder.id,
         handler: async function (paymentResponse) {
@@ -157,7 +146,6 @@ const CartPage = () => {
                 paymentStatus: 'paid'
               }
             );
-
             // Step 4: Track coupon usage with the actual orderId using Axios
             if (couponCode && discount > 0) {
               await axios.post(
@@ -172,7 +160,6 @@ const CartPage = () => {
                 }
               );
             }
-
             toast.success("Payment successful & Order placed!");
             localStorage.removeItem("cart");
             setCart([]);
@@ -211,7 +198,6 @@ const CartPage = () => {
           console.error("Error deleting order:", deleteErr);
         }
       }
-
       if (err.response?.data?.message) {
         toast.error(err.response.data.message);
       } else {

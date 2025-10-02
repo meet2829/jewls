@@ -1,21 +1,8 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
 import ProductCard from "./ProductCard";
 
-const ProductGrid = () => {
-  const [products, setProducts] = useState([]);
-
-  useEffect(() => {
-      axios.get(`${import.meta.env.VITE_API_URL}/api/products/products`)
-      .then(res => setProducts(res.data))
-      .catch(err => console.error("Error fetching products", err));
-  }, []);
-
+const ProductGrid = ({ products }) => {
   return (
     <div className="py-10 px-4 text-center">
-      <h5 className="uppercase text-gray-500 text-sm tracking-widest" data-aos="zoom-in">
-        Summer Collection
-      </h5>
       <h2 className="text-3xl font-semibold italic my-2" data-aos="zoom-in">
         The <span className="font-bold not-italic">Best</span> Products
       </h2>

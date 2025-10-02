@@ -14,9 +14,9 @@ const MonthlyProfitChart = ({ orders }) => {
 
   return (
     <div style={{ width: "100%", height: 400 }}>
-      <LineChart width={700} height={400} data={data}>
+      <LineChart width={600} height={400} data={data}>
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis stroke="#ffffff" dataKey="month"  />
+        <XAxis stroke="#ffffff" dataKey="month" width={400}  />
         <YAxis stroke="oooooo" />
         <Tooltip />
         <Legend />

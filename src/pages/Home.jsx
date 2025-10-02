@@ -9,14 +9,13 @@ import promoVideo from '../assets/main-video.mp4'
 import ContactForm from '../Component/ContactForm';
 import Footer from '../Component/Footer';
 import ProductGrid from '../Component/ProductGrid'
-
-
+import { Link } from 'react-router-dom';
 
 
 
 const Home = () => {
     return (
-        <div>
+        <div className='overflow-hidden'>
             <section className="relative overflow-hidden   text-[#111]">
                 <div
                     className="absolute inset-0 z-0"
@@ -36,13 +35,12 @@ const Home = () => {
                             clipPath: "polygon(50% 0%, 100% 0, 100% 43%, 100% 83%, 67% 93%, 34% 85%, 4% 96%, 0% 43%, 0 0)",
                             WebkitClipPath: "polygon(50% 0%, 100% 0, 100% 43%, 100% 83%, 67% 93%, 34% 85%, 4% 96%, 0% 43%, 0 0)",
                             pointerEvents: "none",
-
                         }}
                     ></div>
                     {/* Text Content */}
                     <div className="absolute inset-0 z-10 flex items-center justify-start text-left px-8 md:px-24" data-aos="fade-up">
                         <div className="max-w-4xl">
-                            <p className="uppercase tracking-widest text-sm">Fall Winter Collection 2025/26--------------------------------------</p>
+                            <p className="uppercase tracking-widest text-sm">Fall Winter Collection 2025/26</p>
                             <h1 className="text-5xl md:text-6xl font-bold font-serif my-4">
                                 The <span className="text-red-600 italic text-6xl md:text-7xl">New</span> Trend
                             </h1>
@@ -102,11 +100,6 @@ const Home = () => {
 
                 </div>
             </div>
-
-
-
-
-
             <div className="flex flex-col lg:flex-row items-center justify-between bg-[#f9f3ef]  mt-[10rem]">
                 {/* Left Image */}
                 <div className="w-full lg:w-1/2">
@@ -197,9 +190,6 @@ const Home = () => {
                     </div>
                 </div>
             </div>
-
-
-
             <div className="flex flex-col md:flex-row w-full min-h-[60vh]">
                 {/* Left Section: Form */}
                 <ContactForm />
@@ -220,11 +210,12 @@ const Home = () => {
                     Your browser does not support the video tag.
                 </video>
             </div>
-            <div>
-                <ProductGrid />
-            </div>
 
-
+                    <section className="py-16 text-center" data-aos="fade-up">
+          <h2 className="text-2xl font-semibold mb-4">Ready to Find Your Signature Piece?</h2>
+          <p className="text-gray-600 mb-6">Browse our latest collection or follow us on Instagram for daily inspiration.</p>
+          <Link to={"/shop"} className="inline-block bg-[#b76e79] text-white px-6 py-3 rounded hover:bg-[#a05c65] transition">Shop the Collection</Link>
+        </section>
             <div className="bg-white">
                 {/* Instagram Section */}
                 <div className="text-center py-16">
@@ -234,11 +225,9 @@ const Home = () => {
                     </h2>
                     <div className="h-[2px] w-12 bg-black mx-auto mt-2"></div>
                 </div>
-
                 {/* Footer Section */}
                 <Footer />
             </div>
         </div>)
 }
-
 export default Home

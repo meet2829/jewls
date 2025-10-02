@@ -4,9 +4,8 @@ import workshopImage from '../assets/workshop.jpg';
 import team1 from '../assets/team1.jpg';
 import team2 from '../assets/team2.jpg';
 import jewelry1 from '../assets/jewls2.jpg';
-import { Link } from "react-router-dom";
 import Footer from '../Component/Footer';
-import Navbar from '../Component/Navbar';
+
 
 const Aboutus = () => {
   return (

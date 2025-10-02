@@ -160,10 +160,9 @@ const ProductList = ({ products, refreshProducts }) => {
           </div>
         ))}
       </div>
-
       {/* Edit Modal */}
       {editingProduct && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+        <div className="fixed inset-0  backdrop-blur-xs flex items-center justify-center z-50">
           <div className="bg-white rounded-3xl p-8 w-96 shadow-2xl animate-fadeIn">
             <h2 className="text-2xl font-bold mb-6 text-gray-800">✏️ Edit Product</h2>
 
@@ -205,13 +204,7 @@ const ProductList = ({ products, refreshProducts }) => {
                 placeholder="Image URL"
                 className="border p-2 w-full rounded-lg focus:ring-2 focus:ring-pink-400 outline-none"
               />
-              {/* <input
-                name="Stock"
-                value={editForm.Stock}
-                onChange={handleChange}
-                
-                
-              /> */}
+            
 
               <input
                 name="Stock"
