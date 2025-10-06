@@ -1,4 +1,6 @@
+import axios from "axios";
 import React, { useState } from "react";
+import { Bounce, toast } from "react-toastify";
 
 const ProductList = ({ products, refreshProducts }) => {
   const [editingProduct, setEditingProduct] = useState(null);
@@ -9,6 +11,8 @@ const ProductList = ({ products, refreshProducts }) => {
     description: "",
     imageUrl: "",
     category: "",
+    overview: "",   
+    images: [], 
     Stock: "",
     rating: "",
     sale: false,
@@ -165,7 +169,6 @@ const ProductList = ({ products, refreshProducts }) => {
         <div className="fixed inset-0  backdrop-blur-xs flex items-center justify-center z-50">
           <div className="bg-white rounded-3xl p-8 w-96 shadow-2xl animate-fadeIn">
             <h2 className="text-2xl font-bold mb-6 text-gray-800">✏️ Edit Product</h2>
-
             <div className="space-y-3">
               <input
                 name="name"
@@ -223,6 +226,7 @@ const ProductList = ({ products, refreshProducts }) => {
                 placeholder="Category"
                 className="border p-2 w-full rounded-lg focus:ring-2 focus:ring-purple-400 outline-none"
               />
+              
               <input
                 name="rating"
                 value={editForm.rating}

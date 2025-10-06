@@ -43,7 +43,7 @@ const AdminPanel = () => {
       const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/products/products`, {
         headers: { "Cache-Control": "no-cache" }
       });
-      setProducts(data);
+      setProducts(data.products);
     } catch (err) {
       console.error("Error fetching products:", err);
     }
@@ -176,7 +176,6 @@ const AdminPanel = () => {
             <ShoppingBag className="w-5 h-5 text-indigo-500" />
             <span>Coupons</span>
           </button>
-
         </nav>
       </div>
 
@@ -233,9 +232,6 @@ const AdminPanel = () => {
               <MonthlyUserChart users={users} />
             </div> */}
           </div>
-
-
-
         </>)}
 
         {activeTab === "products" && (
@@ -289,8 +285,6 @@ const AdminPanel = () => {
                 ))}
               </tbody>
             </table>
-
-
             {selectedOrder && (
               <div className="fixed inset-0 backdrop-blur-xs flex items-center justify-center z-50">
                 <div className="relative mt-6 p-4 border rounded bg-gray-50 shadow-2xl animate-fadeIn w-[90%] max-w-lg">

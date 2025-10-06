@@ -9,7 +9,6 @@ const Shop = () => {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
-
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
@@ -24,7 +23,6 @@ const Shop = () => {
         const prods = Array.isArray(prodRes.data)
           ? prodRes.data
           : prodRes.data.products || [];
-
         setProducts(prods);
         setFilteredProducts(prods);
 

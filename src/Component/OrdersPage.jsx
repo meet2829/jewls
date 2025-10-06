@@ -146,8 +146,9 @@ const OrdersPage = () => {
                           <p>
                             Coupon Code: <span className="font-semibold">{c.code}</span>
                           </p>
+                          <p>Total Before Discount:<span className="font-semibold">{c.totalBeforeDiscount}</span></p>
                           <p>
-                            Discount: <span className="font-semibold">₹{c.discountAmount || c.discountValue}</span>
+                            Discount: <span className="font-semibold">₹{c.discountAmount.toFixed(2) || c.discountValue}</span>
                           </p>
                           <p>
                             Total After Discount:{" "}

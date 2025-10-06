@@ -4,11 +4,13 @@ import axios from "axios";
 import { addToCart } from "../Redux/Slices/cartSlice";
 
 import { Bounce, toast } from "react-toastify";
+import { useDispatch } from "react-redux";
 
 const ProductDetail = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [selectedImage, setSelectedImage] = useState("");
+  const dispatch=useDispatch();
 
   useEffect(() => {
     axios
@@ -91,12 +93,12 @@ const ProductDetail = () => {
         {/* Short Description */}
         <p className="text-gray-700 leading-relaxed mb-6">
           {product.shortDescription}
-        </p>
+        </p>  
 
         {/* Add to Cart */}
         <button
           onClick={() => {
-            addToCart(product);
+            dispatch(addToCart(product));
             toast.success("Added to cart!", {
               position: "top-right",
               autoClose: 3000,

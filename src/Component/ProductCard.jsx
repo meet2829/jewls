@@ -24,7 +24,7 @@ const handleAddToCart = () => {
   };
 
   return (
-    <div className="relative border p-4 rounded-md shadow hover:shadow-lg transition flex flex-col justify-between">
+    <div className="relative border p-4 rounded-md shadow hover:shadow-lg transition flex flex-col justify-between bg-white">
       {product.sale && (
         <div className="absolute top-2 left-2 bg-red-700 text-white px-2 py-1 text-xs font-bold rounded">
           SALE
