@@ -101,7 +101,6 @@ const OrdersPage = () => {
                   </div>
                   <div className="mt-2 md:mt-0">{getStatusBadge(order.status)}</div>
                 </div>
-
                 {/* Order Items */}
                 <div className="divide-y">
                   {order.items.map((item) => (
