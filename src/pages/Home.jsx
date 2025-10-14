@@ -6,16 +6,17 @@ import img2 from '../assets/img-2.jpg'
 import img3 from '../assets/img-3.jpg'
 import img4 from '../assets/img-4.jpg'
 import promoVideo from '../assets/main-video.mp4'
-import ContactForm from '../Component/ContactForm';
 import Footer from '../Component/Footer';
-import ProductGrid from '../Component/ProductGrid'
 import { Link } from 'react-router-dom';
+import { Suspense, lazy } from 'react';
 
-
+const ContactForm = lazy(() => import('../Component/ContactForm'));
 
 const Home = () => {
     return (
         <div className='overflow-hidden'>
+
+             {/* Hero Content */}
             <section className="relative overflow-hidden   text-[#111]">
                 <div
                     className="absolute inset-0 z-0"
@@ -25,7 +26,6 @@ const Home = () => {
                         WebkitClipPath: "polygon(50% 0%, 100% 0, 100% 43%, 100% 83%, 67% 93%, 34% 85%, 4% 96%, 0% 43%, 0 0)",
                     }}
                 ></div>
-                {/* Hero Content */}
                 <div className="relative h-screen w-full">
                     {/* Background */}
                     <div
@@ -57,9 +57,9 @@ const Home = () => {
             </section>
 
 
+                {/* Display Information */}
             <div className="py-16 bg-white mt-[10rem]" data-aos='zoom-in'>
                 <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 text-center px-4">
-
                     <div>
                         <FaMapMarkerAlt className="text-4xl text-orange-300 mx-auto mb-4" />
                         <h3 className="font-bold text-lg mb-2">Have a Plan</h3>
@@ -100,6 +100,8 @@ const Home = () => {
 
                 </div>
             </div>
+
+            {/* Image+Side Text Section */}
             <div className="flex flex-col lg:flex-row items-center justify-between bg-[#f9f3ef]  mt-[10rem]">
                 {/* Left Image */}
                 <div className="w-full lg:w-1/2">
@@ -129,7 +131,7 @@ const Home = () => {
                 </div>
             </div>
 
-
+            {/* Blog Section */}
             <div className="py-16 bg-white">
                 <div className="text-center max-w-3xl mx-auto mb-12 px-4">
                     <p className="text-sm tracking-widest uppercase">New Fall Collection</p>
@@ -190,9 +192,14 @@ const Home = () => {
                     </div>
                 </div>
             </div>
+
+
+            {/* Contact Section */}
             <div className="flex flex-col md:flex-row w-full min-h-[60vh]">
                 {/* Left Section: Form */}
-                <ContactForm />
+                <Suspense fallback={<p>Loading....</p>}>
+                    <ContactForm />
+                </Suspense>
 
                 {/* Right Section: Image */}
                 <div className="w-full md:w-1/2 h-[500px] ">
@@ -204,6 +211,8 @@ const Home = () => {
                 </div>
             </div>
 
+
+            {/* Promo Video Section */}
             <div className="mt-35 w-full h-[500px] object-contain ">
                 <video className="w-full h-full object-cover" autoPlay loop muted playsInline>
                     <source src={promoVideo} type="video/mp4" />
@@ -211,12 +220,17 @@ const Home = () => {
                 </video>
             </div>
 
-                    <section className="py-16 text-center" data-aos="fade-up">
-          <h2 className="text-2xl font-semibold mb-4">Ready to Find Your Signature Piece?</h2>
-          <p className="text-gray-600 mb-6">Browse our latest collection or follow us on Instagram for daily inspiration.</p>
-          <Link to={"/shop"} className="inline-block bg-[#b76e79] text-white px-6 py-3 rounded hover:bg-[#a05c65] transition">Shop the Collection</Link>
-        </section>
+
+            {/* Call to Action Section For Shopping  */}
+            <section className="py-16 text-center" data-aos="fade-up">
+                <h2 className="text-2xl font-semibold mb-4">Ready to Find Your Signature Piece?</h2>
+                <p className="text-gray-600 mb-6">Browse our latest collection or follow us on Instagram for daily inspiration.</p>
+                <Link to={"/shop"} className="inline-block bg-[#b76e79] text-white px-6 py-3 rounded hover:bg-[#a05c65] transition">Shop the Collection</Link>
+            </section>
+
+
             <div className="bg-white">
+
                 {/* Instagram Section */}
                 <div className="text-center py-16">
                     <p className="uppercase text-sm tracking-widest text-gray-500" data-aos="fade-left">Follow our stories</p>
@@ -225,6 +239,8 @@ const Home = () => {
                     </h2>
                     <div className="h-[2px] w-12 bg-black mx-auto mt-2"></div>
                 </div>
+
+
                 {/* Footer Section */}
                 <Footer />
             </div>

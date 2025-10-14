@@ -2,7 +2,7 @@ import React, { useState, useEffect, } from "react";
 import ProductForm from "./ProductForm";
 import ProductList from "./ProductList";
 import UsersList from "./UserList";
-import { User, LayoutDashboard, ShoppingBasket, SquarePlus, ShoppingBag, UserStar, MessagesSquare, X, CircleX } from "lucide-react";
+import { User, LayoutDashboard, ShoppingBasket, SquarePlus, ShoppingBag, UserStar, MessagesSquare, X, CircleX, XCircle } from "lucide-react";
 import MonthlyOrderChart from "./Charts/MonthlyOrderChart";
 import MonthlyProfitChart from "./Charts/MonthlyProfitChart";
 import { useNavigate } from "react-router-dom";
@@ -104,7 +104,6 @@ const AdminPanel = () => {
     fetchCoupons();
   }, []);
 
-  // Calculate profit
   const totalProfit = orders.reduce((sum, order) => sum + order.total, 0);
 
   return (
@@ -162,7 +161,7 @@ const AdminPanel = () => {
           <button
             onClick={() => setActiveTab("Contect")}
             className={`w-full flex items-center gap-3 p-2 rounded transition 
-        ${activeTab === "orders" ? "bg-gray-700" : "hover:bg-gray-700"}`}
+        ${activeTab === "Contect" ? "bg-gray-700" : "hover:bg-gray-700"}`}
           >
             <MessagesSquare className="w-5 h-5 text-indigo-500" />
             <span>Massage</span>

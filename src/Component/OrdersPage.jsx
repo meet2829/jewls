@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { BadgeCheck, Package, Truck, XCircle } from "lucide-react";
+import { toast } from "react-toastify";
 
 const OrdersPage = () => {
   const [orders, setOrders] = useState([]);
@@ -14,13 +15,13 @@ const OrdersPage = () => {
         const res = await fetch(`${import.meta.env.VITE_API_URL}/api/orders`);
         const data = await res.json();
         console.log(" order data:", data);
-        const userOrders = data.filter(order => order.user._id === user._id);
+        const userOrders = data.filter(order => order.user?._id === user._id);
         setOrders(userOrders);
+        console.log("Filtered user orders:", userOrders);
       } catch (err) {
         console.error("Failed to fetch orders", err);
       }
     };
-
 
     const fetchCoupons = async () => {
       try {
@@ -35,10 +36,27 @@ const OrdersPage = () => {
     };
 
 
-
     fetchOrders();
     fetchCoupons();
   }, []);
+
+  const CancleOrder = async (orderId) => {
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/orders/${orderId}/cancel`, {
+        method: "PUT",
+      });
+      if (res.ok) {
+        setOrders(orders.map(order => order._id === orderId ? { ...order, status: "Cancelled" } : order));
+        toast.success("Order cancelled successfully!");
+      } else {
+        toast.error("Failed to cancel order");
+      }
+    } catch (err) {
+      console.error("Error cancelling order:", err);
+      toast.error("Something went wrong while cancelling order");
+    }
+  };
+
 
   if (!user) {
     return <p className="p-6 text-center">Please login to view your orders.</p>;
@@ -89,7 +107,10 @@ const OrdersPage = () => {
             {orders.map((order) => (
               <div
                 key={order._id}
-                className="bg-white shadow-lg rounded-2xl p-6 border hover:shadow-xl transition"
+                className={`relative shadow-lg rounded-2xl p-6 border transition ${order.status === "Cancelled"
+                    ? "bg-gray-100 border-gray-300 opacity-70 grayscale"
+                    : "bg-white hover:shadow-xl"
+                  }`}
               >
                 {/* Order Header */}
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
@@ -124,7 +145,6 @@ const OrdersPage = () => {
                   ))}
                 </div>
 
-               
                 {/* Grand Total + Coupons + Button */}
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center mt-6 pt-4 border-t gap-4">
                   {/* Left side: Grand Total */}
@@ -157,14 +177,20 @@ const OrdersPage = () => {
                       ))}
                   </div>
 
-                  {/* View Details Button */}
-                  <button className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
-                    View Details
+
+                  <button
+                    className={`px-4 py-2 rounded-lg transition ${order.status === "Cancelled"
+                      ? "bg-gray-400 text-black cursor-not-allowed"
+                      : "bg-red-600 text-white hover:bg-red-700"
+                      }`}
+                    onClick={() => order.status !== "Cancelled" && CancleOrder(order._id)}
+                    disabled={order.status === "Cancelled"}
+                  >
+                    {order.status === "Cancelled" ? "Cancelled" : "Cancel Order"}
                   </button>
+
                 </div>
-
               </div>
-
             ))}
           </div>
         )}

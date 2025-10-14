@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import FormInput from "../Component/utils/FormInput";
 import axios from "axios";
 
@@ -70,7 +70,6 @@ const ProductForm = ({ refreshProducts }) => {
       <FormInput name="oldPrice" type="number" placeholder="Old Price" value={formData.oldPrice} onChange={handleChange} />
       <FormInput name="description" placeholder="Description" value={formData.description} onChange={handleChange} required />
       <FormInput name="imageUrl" placeholder="Insert Image URL" value={formData.imageUrl} onChange={handleChange} required />
-
       <FormInput name="overview" placeholder="Overview" value={formData.Overview} onChange={handleChange} required />
 
       <FormInput
@@ -83,7 +82,7 @@ const ProductForm = ({ refreshProducts }) => {
             images: e.target.value
               .split(",")
               .map((url) => url.trim())
-              .filter((url) => url !== ""), // clean empty strings
+              .filter((url) => url !== ""),
           })
         }
       />

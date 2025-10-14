@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import  { useState } from "react";
 import { Bounce, toast } from "react-toastify";
 
 const ProductList = ({ products, refreshProducts }) => {
@@ -22,7 +22,6 @@ const ProductList = ({ products, refreshProducts }) => {
  const handleDelete = async (id) => {
   try {
     await axios.delete(`${import.meta.env.VITE_API_URL}/api/products/products/${id}`);
-
     toast.success("Product deleted successfully!", {
       position: "top-right",
       autoClose: 3000,

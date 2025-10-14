@@ -11,7 +11,7 @@ const AuthForm = () => {
   const dispatch = useDispatch();
 
   const [isSignUp, setIsSignUp] = useState(false);
-  const [step, setStep] = useState(1); // 1 = Form, 2 = OTP
+  const [step, setStep] = useState(1);
   const [otp, setOtp] = useState("");
   const [formData, setFormData] = useState({
     name: "",
@@ -161,5 +161,4 @@ const AuthForm = () => {
     </div>
   );
 };
-
 export default AuthForm;
